@@ -1,0 +1,111 @@
+﻿/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    .body-content {
+        padding: 0;
+    }
+}
+
+
+
+
+
+.custom-label {
+    text-align: left;
+}
+
+
+
+.navbar-brand {
+    color: lightseagreen;
+}
+
+
+
+
+
+
+.left-align-label {
+    text-align: left;
+}
+
+
+
+/* Default style for the text box */
+.responsive-textbox {
+    width: 400px; /* Default width for larger screens */
+}
+
+
+
+/* Media query for smaller screens */
+@media (max-width: 1000px) {
+    .responsive-textbox {
+        width: 300px; /* Adjust the width for smaller screens */
+    }
+}
+
+
+
+/* Media query for even smaller screens */
+@media (max-width: 576px) {
+    .responsive-textbox {
+        width: 200px; /* Adjust the width for even smaller screens */
+    }
+}
+
+.btn-custom {
+    background-color: white;
+    color: lightseagreen;
+    border: 1px solid lightseagreen;
+    border-radius: 5px; /* rounded corners */
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align:center;
+}
+
+    .btn-custom:hover {
+        background-color: lightseagreen;
+        color: white;
+    }
+
+    .btn-custom:focus {
+        background-color: lightseagreen;
+        color: white;
+    }
+
+/*#009688*/
+/* Normal style for the text box */
+.form-control {
+    border-color: #ccc; /* Default border color */
+}
+
+    /* Style for the text box when it is focused */
+    .form-control:focus {
+        border-color: lightseagreen; /* Green border color when focused */
+        box-shadow: 0 0 3px lightseagreen; /* Optional: Add a green shadow when focused */
+    }
+
+    .form-control:hover {
+        border-color: lightseagreen;
+    }
+
+/*table {
+    width: 100%;*/ /* Full-width table */
+    /*border-collapse: collapse;
+    font-size: 15px;*/ /* Increase font size */
+/*}*/
+
+
+
+
