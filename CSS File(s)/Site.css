@@ -162,3 +162,9 @@ hr{
    .form-group:focus .label{
         color: #008080;
     }
+
+.custom-table th {
+    background-color: lightseagreen !important;
+    color: white !important;
+}
+
