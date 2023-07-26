@@ -185,7 +185,7 @@ namespace MorgueTracker3
 
                     // Format the DateTime object into the "MM-dd-yyyy" format
                     string startFormattedDateString = startDate.ToString("MM-dd-yyyy");
-                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "MorguePatients_from(" + startFormattedDateString + "to " + dateTimeWithHyphens + ").xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "_MorguePatients(" + startFormattedDateString + "_to_" + dateTimeWithHyphens + ").xls");
                 }
                 else if (txtStartDate.Text.IsNullOrWhiteSpace())
                 {
@@ -193,7 +193,7 @@ namespace MorgueTracker3
                     string endOriginalDateString = txtEndDate.Text;
                     DateTime endDate = DateTime.ParseExact(endOriginalDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     string endFormattedDateString = endDate.ToString("MM-dd-yyyy");
-                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "MorguePatients_until(" + endFormattedDateString + ").xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "_MorguePatients_until(" + endFormattedDateString + ").xls");
                 }
                 else
                 {
@@ -203,7 +203,7 @@ namespace MorgueTracker3
                     string endOriginalDateString = txtEndDate.Text;
                     DateTime endDate = DateTime.ParseExact(endOriginalDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     string endFormattedDateString = endDate.ToString("MM-dd-yyyy");
-                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "_Morgue_Patients(" + startFormattedDateString + "_to_" + endFormattedDateString + ").xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "_MorguePatients(" + startFormattedDateString + "_to_" + endFormattedDateString + ").xls");
                 }
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.ms-excel";
