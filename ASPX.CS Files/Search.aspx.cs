@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Web;
+using System.Data.SqlClient;
+using System.Net.NetworkInformation;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace MorgueTracker3
 {
-    public partial class Search : System.Web.UI.Page
+    public partial class Search : Page
     {
         SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MorgueTrackerConn"].ConnectionString);
         bool isFullDetails = false; // Flag to track if all details are available
@@ -19,9 +16,11 @@ namespace MorgueTracker3
         protected void Page_Load(object sender, EventArgs e)
         {
             HideLabels();
+            Page.SetFocus(txtPatientID);
+
         }
 
-        protected string purgeSearch(string str)
+        protected string purgeSearch (string str)
         {
             str = str.Trim('\\');
             return str;
@@ -54,6 +53,7 @@ namespace MorgueTracker3
             if (dataTable.Rows.Count <= 0)
             {
                 lblSuccessStatus.Text = "No results found.";
+                lblSuccessStatus.Style.Add("border-color", "red");
                 lblSuccessStatus.Visible = true;
             }
             else
@@ -103,47 +103,78 @@ namespace MorgueTracker3
             }
         }
 
+        protected void clearFuneralFields()
+        {
+            txtFuneralHome.Text = "";
+            txtFuneralHomeEmployee.Text = "";
+            txtOutEmployeeName.Text = "";
+            txtOutEmployeeID.Text = "";
+        }
 
         protected void Submit_Click(object sender, EventArgs e)
         {
             if (!isFullDetails)
             {
                 string patientID = txtPatientID.Text.Trim();
-                string funeralHome = txtFuneralHome.Text.Trim();
+                string funeralHome = txtFuneralHome.Text.Trim().ToString();
                 string funeralEmployee = txtFuneralHomeEmployee.Text.Trim().ToString();
                 string morgueEmployee = txtOutEmployeeName.Text.Trim().ToString();
-                string morgueEmployeeID = txtEmployeeID.Text.Trim().ToString();
+                string morgueEmployeeID = txtOutEmployeeID.Text.Trim();
+                string locationInMorgue = ddlLocationInMorgue.SelectedItem.Text.ToString();
 
                 // Input Validation
                 if (string.IsNullOrWhiteSpace(funeralHome))
                 {
                     lblSuccessStatus.Text = "Funeral Home is required.";
+                    lblSuccessStatus.Style.Add("border-color", "red");
                     lblSuccessStatus.Visible = true;
+                    clearFuneralFields();
+
+                    return;
+                }
+
+                if (!int.TryParse(morgueEmployeeID, out int parsedMorgueEmployeeID) )
+                {
+                    lblSuccessStatus.Text = "Invalid Employee ID";
+                    lblSuccessStatus.Style.Add("border-color", "red");
+                    lblSuccessStatus.Visible = true;
+                    clearFuneralFields();
+
+                    return;
+                }
+                if (!int.TryParse(purgeSearch(patientID), out int parsedPatientID))
+                {
+                    lblSuccessStatus.Text = "Invalid Patient ID";
+                    lblSuccessStatus.Style.Add("border-color", "red");
+                    lblSuccessStatus.Visible = true;
+                    clearFuneralFields();
                     return;
                 }
 
                 SqlCommand cmdInsertPickedUpInfo = new SqlCommand("dbo.InsertPickedUpInfo", conn);
                 cmdInsertPickedUpInfo.CommandType = CommandType.StoredProcedure;
 
-                cmdInsertPickedUpInfo.Parameters.AddWithValue("@Patient_ID", patientID);
+                cmdInsertPickedUpInfo.Parameters.AddWithValue("@Patient_ID", parsedPatientID);
                 cmdInsertPickedUpInfo.Parameters.AddWithValue("@Funeral_Home", funeralHome);
                 cmdInsertPickedUpInfo.Parameters.AddWithValue("@Funeral_Home_Employee", funeralEmployee);
                 cmdInsertPickedUpInfo.Parameters.AddWithValue("@Out_Employee_Name", morgueEmployee);
-                cmdInsertPickedUpInfo.Parameters.AddWithValue("@Out_Employee_ID", morgueEmployeeID);
+                cmdInsertPickedUpInfo.Parameters.AddWithValue("@Out_Employee_ID", parsedMorgueEmployeeID);
                 cmdInsertPickedUpInfo.Parameters.AddWithValue("@Picked_Up_Date", DateTime.Now.ToString());
+                cmdInsertPickedUpInfo.Parameters.AddWithValue("@Location_In_Morgue", locationInMorgue);
 
 
                 try
                 {
                     conn.Open();
                     cmdInsertPickedUpInfo.ExecuteNonQuery();
-                    lblSuccessStatus.Text = "Information Updated!";
-                    lblSuccessStatus.Visible = true;
+                    
                 }
                 catch (SqlException ex)
                 {
                     lblSuccessStatus.Text = "An error occurred: " + ex.Message;
                     lblSuccessStatus.Visible = true;
+                    clearFuneralFields();
+
                 }
                 finally
                 {
@@ -160,9 +191,12 @@ namespace MorgueTracker3
             string inEmployeeName = txtEmployeeName.Text.ToString();
             string locationInMorgue = ddlLocationInMorgue.SelectedItem.Text;
 
+                
+
             if (locationInMorgue.Equals("Select Location") || ddlLocationInMorgue.SelectedValue.Equals("-1"))
             {
                 lblSuccessStatus.Visible = true;
+                lblSuccessStatus.Style.Add("border-color", "red");
                 lblSuccessStatus.Text = "Location Required";
                 return;
             }
@@ -170,7 +204,7 @@ namespace MorgueTracker3
             if (int.TryParse(patientID, out int parsedPatientID) && int.TryParse(inEmployeeID, out int parsedEmployeeID))
             {
                 // Check if the patient has no location in the morgue
-
+             
 
                 SqlCommand cmdUpdatePatientInfo = new SqlCommand("dbo.UpdatePatientInfo", conn);
                 cmdUpdatePatientInfo.CommandType = CommandType.StoredProcedure;
@@ -185,6 +219,7 @@ namespace MorgueTracker3
                 {
                     conn.Open();
                     cmdUpdatePatientInfo.ExecuteScalar();
+                    lblSuccessStatus.Style.Add("border-color", "lightseagreen");
                     lblSuccessStatus.Text = "Information Updated!";
                     lblSuccessStatus.Visible = true;
                 }
@@ -195,15 +230,12 @@ namespace MorgueTracker3
                 }
                 finally
                 {
-                    lblSuccessStatus.Text = locationInMorgue;
-                    lblSuccessStatus.Visible = true;
                     conn.Close();
                 }
             }
         }
 
-
-
+    
         protected void Release_Click(object sender, EventArgs e)
         {
             txtOutEmployeeID.Visible = true;
@@ -265,7 +297,7 @@ namespace MorgueTracker3
             hrResult.Visible = true;
             ddlLocationInMorgue.Visible = true;
             btnRelease.Visible = true;
-            lblLocationInMorgue.Visible = true;
+            lblLocationInMorgue.Visible= true;
         }
 
         private void ShowReleaseLabels()
@@ -280,7 +312,7 @@ namespace MorgueTracker3
             lblOutEmployeeName.Visible = true;
             lblOutEmployeeID.Visible = true;
 
-            btnSubmit.Visible = true;
+            btnSubmit.Visible =true;
         }
     }
 }
