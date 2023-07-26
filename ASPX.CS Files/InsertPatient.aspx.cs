@@ -1,28 +1,27 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
+
 
 namespace MorgueTracker3
 {
-    public partial class InsertPatient : System.Web.UI.Page
+    public partial class InsertPatient : Page
     {
         private SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MorgueTrackerConn"].ConnectionString);
         protected void Page_Load(object sender, EventArgs e)
         {
             lbStatus.Visible = false;
-
+            txtPatientID.Focus();
 
         }
 
         public static string stripStringPatient(string str)
         {
-            str = str.Trim('\\');
-            return str;
+            return str.Replace("\\", "");
 
         }
         public static string stripStringEmployee(string input)
@@ -64,6 +63,30 @@ namespace MorgueTracker3
 
             return input;
         }
+
+        private string checkIfDigits(string input)
+        {
+            // Match any non-digit characters using regex
+            Match match = Regex.Match(input, @"^(?:\d+|\\(\d+)\\)$");
+
+
+            // If there are any non-digit characters, display an error message
+            if (!match.Success)
+            {
+                //string errorMessage = "Patient ID and Employee ID should only contain numbers (0-9).";
+                //Page.ClientScript.RegisterStartupScript(this.GetType(), "ErrorAlert", $"alert('{errorMessage}');", true);
+
+                lbStatus.Text = "Invalid Patient ID or Employee ID";
+                lbStatus.Visible = true;
+                lbStatus.Attributes.Add("style", "border-color: red;");
+                return string.Empty; // Return an empty string to indicate an error
+            }
+
+            // If there are no non-digit characters, return the cleaned string
+            return input;
+        }
+
+
         protected void Submit_OnClick(object sender, EventArgs e)
         {
             string PatientID = stripStringPatient(txtPatientID.Text.ToString());
@@ -71,8 +94,8 @@ namespace MorgueTracker3
             string EmployeeID = stripStringEmployee(txtEmployeeID.Text.ToString());
             string EmployeeName = txtEmployeeName.Text.ToString();
 
-
-
+            PatientID = checkIfDigits(PatientID);
+            EmployeeID = checkIfDigits(EmployeeID);
 
             // Check that Patient ID that already exists
             SqlCommand cmdCheckPatientExists = new SqlCommand("SELECT COUNT(*) FROM MorgueTracker WHERE Patient_ID = @Patient_ID", conn);
@@ -82,7 +105,14 @@ namespace MorgueTracker3
             int count = (int)cmdCheckPatientExists.ExecuteScalar();
             conn.Close();
 
-            if (count > 0)
+            if (string.IsNullOrEmpty(txtPatientID.Text))
+            {
+                lbStatus.Text = "Please Input a Patient ID";
+                lbStatus.Visible = true;
+                lbStatus.Attributes.Add("style", "border-color: red;");
+            }
+
+            else if (count > 0)
             {
                 lbStatus.Text = "Patient ID already exists";
                 lbStatus.Visible = true;
@@ -107,22 +137,19 @@ namespace MorgueTracker3
 
                         lbStatus.Text = "Patient Added Successfuly";
                         lbStatus.Visible = true;
+                        lbStatus.Attributes.Add("style", "border-color: green;");
                     }
                     catch
                     {
                         lbStatus.Text = "Patient Upload Failed";
                         lbStatus.Visible = true;
+                        lbStatus.Attributes.Add("style", "border-color: red;");
                     }
                     finally
                     {
                         conn.Close();
-                    }
 
-                }
-                else
-                {
-                    string errorMessage = "Employee ID: " + EmployeeID + " PatientID: " + PatientID;
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ErrorAlert", $"alert('{errorMessage}');", true);
+                    }
                 }
             }
         }
