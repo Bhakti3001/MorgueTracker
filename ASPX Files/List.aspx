@@ -1,8 +1,8 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="List.aspx.cs" Inherits="MorgueTracker3.List" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <main>
-        <h1 id="listPatientTitle" class=" text-center" style="font-size: 30px">Current Morgue Patients</h1>
+     <main>
+        <h1 id="listPatientTitle" class=" text-center">Current Morgue Patients</h1>
         <br />
         <hr />
         <section class="row justify-content-center" aria-labelledby="listPatientsTitle">
@@ -30,8 +30,10 @@
             <br />
             <br />
             <br />
-            <asp:GridView ID="gvList" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-light table-hover table-striped" AllowPaging="false" PageSize="5" OnPageIndexChanging="gvList_PageIndexChanging">
+            <asp:Label ID="lblStatus" runat="server" CssClass ="form-control" Visible="false"></asp:Label>
+            <asp:GridView ID="gvList" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-light custom-table" AllowPaging="true" PageSize="5" OnPageIndexChanging="gvList_PageIndexChanging">
                 <PagerSettings Position="Bottom" />
+                
                 <Columns>
                     <asp:BoundField DataField="Patient_Name" HeaderText="Patient Name" ItemStyle-Width="120" />
                     <asp:BoundField DataField="Patient_ID" HeaderText="Patient ID" ItemStyle-Width="100" />
@@ -53,5 +55,10 @@
                 <asp:Button ID="btnExport" runat="server" CssClass="col-md-3 btn btn-primary btn-lg" Text="Export to Excel" OnClick="btnExport_Click" />
             </div>
         </section>
+          <br />
+            <br />
+            <br />
+             <br />
+            <br />
     </main>
 </asp:Content>
