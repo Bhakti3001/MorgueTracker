@@ -1,18 +1,17 @@
 using Microsoft.Ajax.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Web;
+using System.Net.NetworkInformation;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace MorgueTracker3
 {
-    public partial class List : System.Web.UI.Page
+    public partial class List : Page
     {
         private SqlConnection conn;
         private string selectAll = "SELECT Patient_Name, Patient_ID, In_Employee_Name, In_Employee_ID, Created_Date, Out_Employee_Name, Out_Employee_ID, Location_In_Morgue, Funeral_Home, Funeral_Home_Employee, Picked_Up_Date ";
@@ -21,26 +20,22 @@ namespace MorgueTracker3
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             if (!IsPostBack)
             {
                 conn = CreateConnection();
                 BindGridView();
+
             }
         }
+
+
+
         protected void SearchByDate_Click(object sender, EventArgs e)
         {
-
-
-
-
-
+            lblStatus.Visible = false;
             string dtStartDate = txtStartDate.Text;
             string dtEndDate = txtEndDate.Text;
-
-
-
-
-
             string query = selectAll + "FROM MorgueTracker ";
             // Check if the start date or end date is empty
             if (!string.IsNullOrEmpty(dtStartDate) || !string.IsNullOrEmpty(dtEndDate))
@@ -60,9 +55,6 @@ namespace MorgueTracker3
                 {
                     query += "WHERE CAST(Created_Date AS DATE) BETWEEN @startDate AND @endDate ";
                 }
-
-
-
                 if (PickUpCheck.Checked == false)
                 {
                     query += "AND Funeral_Home IS NULL ";
@@ -72,11 +64,6 @@ namespace MorgueTracker3
                     query += "AND Funeral_Home IS NOT NULL ";
                 }
             }
-
-
-
-
-
             else if (PickUpCheck.Checked == false)
             {
                 query += " WHERE Funeral_Home IS NULL ";
@@ -85,11 +72,7 @@ namespace MorgueTracker3
             {
                 query += " WHERE Funeral_Home IS NOT NULL ";
             }
-
-
-            query += "ORDER BY Patient_Name ASC";
-
-
+            query += "ORDER BY Created_Date DESC";
             conn = CreateConnection();
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
@@ -101,128 +84,61 @@ namespace MorgueTracker3
                 {
                     cmd.Parameters.AddWithValue("@endDate", dtEndDate);
                 }
-
                 conn.Open();
-
+                DataTable dt = new DataTable();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    gvList.DataSource = reader;
-                    gvList.DataBind();
+                    dt.Load(reader);
                 }
+                gvList.DataSource = dt;
+                gvList.DataBind();
                 conn.Close();
-
-
 
                 if (gvList.Rows.Count == 0)
                 {
-                    string successMessage = "No Data Found";
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('{successMessage}');", true);
+                    lblStatus.Visible = true;
+                    lblStatus.Text = "No Data Found";
+                    lblStatus.Attributes.Add("style", "border-color: red;");
                 }
             }
         }
-
 
 
 
         protected void gvList_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvList.PageIndex = e.NewPageIndex;
+
             BindGridView();
         }
 
 
-
-
-        protected void PickUp_Check(object sender, EventArgs e)
-        {
-            string query;
-            if (PickUpCheck.Checked == false)
-            {
-                query = selectAll + "FROM MorgueTracker WHERE Funeral_Home IS NULL ORDER BY Patient_Name ASC";
-            }
-            else
-            {
-                query = selectAll + "FROM MorgueTracker WHERE Funeral_Home IS NOT NULL ORDER BY Patient_Name ASC";
-            }
-
-
-
-
-
-            ExecuteQuery(query);
-        }
-        // Insert on pick up
-
-
-
-
-
-        // Search "locationInnMorgue"
-
-
-
-
-
-        //ADD DROP DOWN FOR LOCATIONS IN SEACH PATIENT
-        //NEED WAY TO SORT BY DATE
-        // On search, have way to verify that the patient is going to the right place
-        // input employee ID
-        // two person validation
-        //search split into two funcitonalitys, viewing record, and exporting
-
-
-
-
-
-
-
-
         private void BindGridView()
         {
-            string query = selectAll + "FROM MorgueTracker WHERE Funeral_Home IS NULL ORDER BY Patient_Name ASC";
-            ExecuteQuery(query);
-        }
+            
+            int startRow = gvList.PageIndex * gvList.PageSize;
+            string query = "SELECT * FROM MorgueTracker WHERE Funeral_Home IS NULL ORDER BY Created_Date DESC";
+            string connectionString = ConfigurationManager.ConnectionStrings["MorgueTrackerConn"].ConnectionString;
 
-
-
-
-
-
-
-        private void ExecuteQuery(string query)
-        {
-            conn = CreateConnection();
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                conn.Open();
-
-
-
-
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    gvList.DataSource = reader;
+
+                    conn.Open();
+
+                    DataTable dt = new DataTable();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                    }
+                    conn.Close();
+
+                    gvList.DataSource = dt;
                     gvList.DataBind();
                 }
-
-
-
-
-
             }
-            conn.Close();
         }
-
-
-
-        protected void Date_TextChanged(object sender, EventArgs e)
-        {
-            // Perform search here
-            SearchByDate_Click(sender, e);
-        }
-
-
 
 
         private SqlConnection CreateConnection()
@@ -232,39 +148,20 @@ namespace MorgueTracker3
 
 
 
-
-
-
-
-
-
-
-
-
-        // string format date
-
-
-
         protected void btnExport_Click(object sender, EventArgs e)
         {
+            string dateTimeWithHyphens = DateTime.Now.ToString("MM-dd-yyyy");
             if (gvList.Rows.Count == 0)
             {
-                string successMessage = "Cannot export empty dataset";
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('{successMessage}');", true);
-                return;
+                lblStatus.Text = "Cannot export empty dataset.";
+                lblStatus.Visible = true;
             }
             else
             {
                 DateTime time = DateTime.Now;
                 Response.Clear();
                 Response.Buffer = true;
-
-
-
                 String pickedUp = "";
-
-
-
                 if (PickUpCheck.Checked == false)
                 {
                     pickedUp = "Not_Picked_Up";
@@ -273,16 +170,8 @@ namespace MorgueTracker3
                 {
                     pickedUp = "Picked_Up";
                 }
-
-
-
-
-
                 if (txtStartDate.Text.IsNullOrWhiteSpace() && txtEndDate.Text.IsNullOrWhiteSpace())
                 {
-                    string dateTimeWithHyphens = DateTime.Now.ToString("MM-dd-yyyy");
-
-
 
                     Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "MorguePatients_as_of(" + dateTimeWithHyphens + ").xls");
                 }
@@ -291,90 +180,43 @@ namespace MorgueTracker3
                     // Original date string in "yyyy-mm-dd" format
                     string startOriginalDateString = txtStartDate.Text;
 
-
-
                     // Parse the original date string into a DateTime object
                     DateTime startDate = DateTime.ParseExact(startOriginalDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-
-
                     // Format the DateTime object into the "MM-dd-yyyy" format
                     string startFormattedDateString = startDate.ToString("MM-dd-yyyy");
-
-
-
-                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "MorguePatients_startingFrom(" + startFormattedDateString + ").xls");
+                    Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "MorguePatients_from(" + startFormattedDateString + "to " + dateTimeWithHyphens + ").xls");
                 }
                 else if (txtStartDate.Text.IsNullOrWhiteSpace())
                 {
-                    // Original date string in "yyyy-mm-dd" format
+
                     string endOriginalDateString = txtEndDate.Text;
-
-
-
-                    // Parse the original date string into a DateTime object
                     DateTime endDate = DateTime.ParseExact(endOriginalDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-
-
-                    // Format the DateTime object into the "MM-dd-yyyy" format
                     string endFormattedDateString = endDate.ToString("MM-dd-yyyy");
                     Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "MorguePatients_until(" + endFormattedDateString + ").xls");
                 }
                 else
                 {
-                    // Original date string in "yyyy-mm-dd" format
                     string startOriginalDateString = txtStartDate.Text;
-
-
-
-                    // Parse the original date string into a DateTime object
                     DateTime startDate = DateTime.ParseExact(startOriginalDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-
-
-                    // Format the DateTime object into the "MM-dd-yyyy" format
                     string startFormattedDateString = startDate.ToString("MM-dd-yyyy");
-
-
-
-                    // Original date string in "yyyy-mm-dd" format
                     string endOriginalDateString = txtEndDate.Text;
-
-
-
-                    // Parse the original date string into a DateTime object
                     DateTime endDate = DateTime.ParseExact(endOriginalDateString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-
-
-                    // Format the DateTime object into the "MM-dd-yyyy" format
                     string endFormattedDateString = endDate.ToString("MM-dd-yyyy");
-
-
-
                     Response.AddHeader("content-disposition", "attachment;filename=" + pickedUp + "_Morgue_Patients(" + startFormattedDateString + "_to_" + endFormattedDateString + ").xls");
                 }
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.ms-excel";
                 using (StringWriter sw = new StringWriter())
                 {
-
                     HtmlTextWriter hw = new HtmlTextWriter(sw);
-
                     // Change the Header Row back to white color
                     gvList.HeaderRow.Style.Add("background-color", "#FFFFFF");
-
-
-
                     // Apply styles to each Header cell
                     foreach (TableCell cell in gvList.HeaderRow.Cells)
                     {
                         cell.Attributes.Add("background-color", "#edfbfb;");
                     }
-
-
-
                     foreach (GridViewRow row in gvList.Rows)
                     {
                         // Apply styles to each row
@@ -385,21 +227,13 @@ namespace MorgueTracker3
                             cell.Attributes.Add("style", "mso-number-format:\\@");
                         }
                     }
-
-
-
                     gvList.RenderControl(hw);
-
-
 
                     // Write the output to the response
                     Response.Output.Write(sw.ToString());
                     Response.Flush();
                     Response.End();
                 }
-
-
-
             }
         }
 
@@ -410,8 +244,5 @@ namespace MorgueTracker3
             /* Confirms that an HtmlForm control is rendered for the specified ASP.NET
                server control at run time. */
         }
-
-
-
     }
 }
