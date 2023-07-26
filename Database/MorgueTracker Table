@@ -1,0 +1,14 @@
+
+CREATE TABLE MorgueTracker (
+    Patient_Name VARCHAR(100),
+    Patient_ID int PRIMARY KEY,
+    In_Employee_Name VARCHAR(100),
+    In_Employee_ID int,
+    Created_Date DATETIME,
+    Out_Employee_Name VARCHAR(100),
+    Out_Employee_ID int,
+    Location_In_Morgue VARCHAR(100),
+    Funeral_Home VARCHAR(200),
+    Funeral_Home_Employee VARCHAR(100),
+    Picked_Up_Date DATETIME
+);
