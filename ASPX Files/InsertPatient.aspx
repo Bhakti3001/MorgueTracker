@@ -1,6 +1,6 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="InsertPatient.aspx.cs" Inherits="MorgueTracker3.InsertPatient" %>
+<%@ Page Title="Insert Patient" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="InsertPatient.aspx.cs" Inherits="MorgueTracker3.InsertPatient" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <main>
         <section class="row justify-content-center" aria-labelledby="insertPatientTitle">
             <div class="col-md-8 text-center">
@@ -47,6 +47,13 @@
                         </div>
                     </div>
                 </div>
+                                    <br />
+                    <br />
+                    <br />
+                                    <br />
+                    <br />
+                    <br />
+
             </div>
         </section>
     </main>
