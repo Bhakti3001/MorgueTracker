@@ -3,7 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <main>
         <h1 id="listPatientTitle" class=" text-center">Current Morgue Patients</h1>
-        <br />
         <hr />
         <section class="row justify-content-center" aria-labelledby="listPatientsTitle">
             <div class="col-12 mt-3">
