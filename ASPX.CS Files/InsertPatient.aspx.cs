@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Web.UI;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 
 namespace MorgueTracker3
@@ -105,6 +106,7 @@ namespace MorgueTracker3
             int count = (int)cmdCheckPatientExists.ExecuteScalar();
             conn.Close();
 
+            // input validation for empty patient ID
             if (string.IsNullOrEmpty(txtPatientID.Text))
             {
                 lbStatus.Text = "Please Input a Patient ID";
@@ -112,11 +114,40 @@ namespace MorgueTracker3
                 lbStatus.Attributes.Add("style", "border-color: red;");
             }
 
+            // input validation for existing patient ID
             else if (count > 0)
             {
                 lbStatus.Text = "Patient ID already exists";
                 lbStatus.Visible = true;
             }
+
+            // input validation for names
+            // allows normal letters, numbers, accented letters, spaces, commas, apotrophes, and dashes
+            // does not allow ×Þß÷þø
+            Regex nameRegex = new Regex("(?i)^(?:(?![×Þß÷þø])[- .'0-9a-zÀ-ÿ])+$");
+
+            if (!nameRegex.IsMatch(EmployeeName) && !nameRegex.IsMatch(PatientName))
+            {
+                lbStatus.Text = "Please input a valid patient and employee name.";
+                lbStatus.Visible = true;
+                lbStatus.Attributes.Add("style", "border-color: red;");
+            }
+
+            else if (!nameRegex.IsMatch(PatientName))
+            {
+                lbStatus.Text = "Please input a valid patient name.";
+                lbStatus.Visible = true;
+                lbStatus.Attributes.Add("style", "border-color: red;");
+            }
+
+            else if (!nameRegex.IsMatch(EmployeeName))
+            {
+                lbStatus.Text = "Please input a valid employee name.";
+                lbStatus.Visible = true;
+                lbStatus.Attributes.Add("style", "border-color: red;");
+            }
+
+            // insert patient into database
             else
             {
                 SqlCommand cmdInsertMorguePatient = new SqlCommand("InsertMorguePatient", conn);
@@ -137,7 +168,7 @@ namespace MorgueTracker3
 
                         lbStatus.Text = "Patient Added Successfuly";
                         lbStatus.Visible = true;
-                        lbStatus.Attributes.Add("style", "border-color: green;");
+                        lbStatus.Attributes.Add("style", "border-color: lightseagreen;");
                     }
                     catch
                     {
