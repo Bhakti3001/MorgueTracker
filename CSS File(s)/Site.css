@@ -23,6 +23,13 @@
 }
 
 
+.date-picker {
+    width: 190px;
+    font-family: 'Microsoft JhengHei', sans-serif;
+    font-size: 15px;
+}
+
+
 
 @media screen and (max-width: 300px) {
 
@@ -32,27 +39,32 @@
         margin-right: 5px;
     }
 }
-@media screen and (max-width: 991px){
-    .col-md-10{
-        width:100%;
+
+@media screen and (max-width: 991px) {
+    .col-md-10 {
+        width: 100%;
     }
-    .form-group row{
-        width:100%;
+    .date-picker{
+        width: 100px;
     }
-    #MainContent_btnSearch{
-    
+
+    .form-group row {
+        width: 100%;
+    }
+
+    #MainContent_btnSearch {
     }
 }
 
 
-@media screen and (max-width: 911px){
-   .col-10{
-       width:100%;
-   }
+@media screen and (max-width: 911px) {
+    .col-10 {
+        width: 100%;
+    }
 }
 
-.horizontal-line{
-    width:100%;
+.horizontal-line {
+    width: 100%;
     color: black;
 }
 
@@ -104,6 +116,7 @@ html, body {
     transition: none;
     border-color: #cacaca;
 }
+
     .form-control:focus {
         border: 1px solid lightseagreen;
     }
@@ -113,44 +126,48 @@ html, body {
 }
 
     .nav-link .active {
-        border-radius:20px;
+        border-radius: 20px;
         font-weight: bold;
     }
 
-.nav-link.active {
-    font-weight:400;
-    color: #ff0000;
-}
-#linkInsert, #linkSearch, #linkList{
+    .nav-link.active {
+        font-weight: 400;
+        color: #ff0000;
+    }
+
+#linkInsert, #linkSearch, #linkList {
     margin-right: 10px;
     margin-left: 10px;
 }
 
 
 
-.btn{
+.btn {
     background-color: lightseagreen;
     border: none;
     border-radius: 6px;
 }
-.btn:hover{
-    background-color: darkcyan;
-    }
-    .btn-primary:active:focus {
-        background-color: mediumspringgreen;
+
+    .btn:hover {
+        background-color: darkcyan;
     }
 
-hr{
-    margin:auto;
+    .btn-primary:active:focus, .btn:active:focus {
+        background-color: #007272;
+    }
+
+hr {
+    margin: auto;
 }
+
 .form-group {
     position: relative;
-    }
+}
 
 .label {
     padding: 2px;
     color: #555;
-/*
+    /*
     position: absolute;
     top: 10px;
     left: 13px;
@@ -159,12 +176,13 @@ hr{
     transition: all 0.3s;
 */
 }
-   .form-group:focus .label{
-        color: #008080;
-    }
+
+.form-group:focus .label {
+    color: #008080;
+}
+
 
 .custom-table th {
     background-color: lightseagreen !important;
     color: white !important;
 }
-
