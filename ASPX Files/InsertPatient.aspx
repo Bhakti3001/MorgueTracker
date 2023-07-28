@@ -1,4 +1,4 @@
-<%@ Page Title="Insert Patient" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="InsertPatient.aspx.cs" Inherits="MorgueTracker3.InsertPatient" %>
+﻿<%@ Page Title="Insert Patient" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="InsertPatient.aspx.cs" Inherits="MorgueTracker3.InsertPatient" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <main>
@@ -43,16 +43,16 @@
                     <br />
                     <div class="row justify-content-center">
                         <div class="col ">
-                            <asp:Label ID="lbStatus" Visible="false" class="form-control form-control-lg" runat="server"></asp:Label>
+                            <asp:Label ID="lbStatus" Visible="false" class="form-control form-control-lg mb-4 col-md-3 p-5" runat="server"></asp:Label>
                         </div>
                     </div>
                 </div>
-                                    <br />
-                    <br />
-                    <br />
-                                    <br />
-                    <br />
-                    <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
 
             </div>
         </section>

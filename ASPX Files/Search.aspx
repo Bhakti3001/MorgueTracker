@@ -109,23 +109,17 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Confirmation</h5>
+                                        <h5 class="modal-title">Patient Release Confirmation</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <asp:Label ID="lblConfirmationMessage" runat="server" Text="" CssClass="mb-3" />
-                                        <div>
-                                            <asp:Label ID="lblPatientNameModal" runat="server" Text=""></asp:Label>
+                                        <div class="text-start">
+                                            <asp:Label ID="message" runat="server" Text="Are you sure you wish to release this patient?"></asp:Label>
                                         </div>
-                                        <div>
-                                            <asp:Label ID="lblEmployeeNameModal" runat="server" Text=""></asp:Label>
-                                        </div>
-                                        <div>
-                                            <asp:Label ID="lblFuneralHomeModal" runat="server" Text=""></asp:Label>
-                                        </div>
+
                                         <div class="d-flex justify-content-end">
                                             <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Return</button>
-                                            <!-- The "Submit_Click" function will be called when the user clicks "Yes" -->
                                             <asp:Button ID="btnSubmitConfirm" CssClass="btn btn-primary" runat="server" Text="Yes" OnClick="Submit_Click" />
                                         </div>
                                     </div>

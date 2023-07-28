@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="List.aspx.cs" Inherits="MorgueTracker3.List" EnableEventValidation="false" %>
+﻿<%@ Page Title="List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="List.aspx.cs" EnableEventValidation="false" Inherits="MorgueTracker3.List" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <main>
@@ -8,12 +8,12 @@
             <div class="col-12 mt-3">
                 <div class="row">
                     <div class="col-md-3 pr-1 d-flex flex-column align-items-start">
-                        <asp:Label ID="lblStartDate" runat="server" Text="Start Date:" CssClass="left-align-label" Style="font-family: 'Microsoft JhengHei', sans-serif; font-weight: bold; font-size: 15px"></asp:Label>
-                        <asp:TextBox ID="txtStartDate" runat="server" TextMode="Date" AutoPostBack="true" OnTextChanged="SearchByDate_Click" Style="width: 190px; font-family: 'Microsoft JhengHei', sans-serif; font-size: 15px" />
+                        <asp:Label ID="lblStartDate" runat="server" Text="Start Date:" Style="font-family: 'Microsoft JhengHei', sans-serif; font-weight: bold; font-size: 15px"></asp:Label>
+                        <asp:TextBox ID="txtStartDate" runat="server" TextMode="Date" AutoPostBack="true" OnTextChanged="SearchByDate_Click" CssClass="date-picker" />
                     </div>
                     <div class="col-md-7 d-flex flex-column align-items-left">
                         <asp:Label ID="lblEndDate" runat="server" Text="End Date:" CssClass="left-align-label" Style="font-family: 'Microsoft JhengHei', sans-serif; font-weight: bold; font-size: 15px"></asp:Label>
-                        <asp:TextBox ID="txtEndDate" runat="server" TextMode="Date" AutoPostBack="true" OnTextChanged="SearchByDate_Click" Style="width: 190px; font-family: 'Microsoft JhengHei', sans-serif; font-size: 15px" />
+                        <asp:TextBox ID="txtEndDate" runat="server" TextMode="Date" AutoPostBack="true" OnTextChanged="SearchByDate_Click" CssClass="date-picker"  />
                     </div>
                     <div class="col-md-2 d-flex flex-column align-items-end">
                         <div class="form-group">
@@ -24,15 +24,15 @@
                     </div>
                     <br />
                 </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <asp:Label ID="lblStatus" runat="server" CssClass="form-control form-control-lg text-center mb-4 col-md-3 p-5" Visible="false"></asp:Label>
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <asp:Label ID="lblStatus" runat="server" CssClass ="form-control" Visible="false"></asp:Label>
             <asp:GridView ID="gvList" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-light custom-table" AllowPaging="true" PageSize="5" OnPageIndexChanging="gvList_PageIndexChanging">
                 <PagerSettings Position="Bottom" />
-                
+
                 <Columns>
                     <asp:BoundField DataField="Patient_Name" HeaderText="Patient Name" ItemStyle-Width="120" />
                     <asp:BoundField DataField="Patient_ID" HeaderText="Patient ID" ItemStyle-Width="100" />
@@ -54,10 +54,10 @@
                 <asp:Button ID="btnExport" runat="server" CssClass="col-md-3 btn btn-primary btn-lg" Text="Export to Excel" OnClick="btnExport_Click" />
             </div>
         </section>
-          <br />
-            <br />
-            <br />
-             <br />
-            <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
     </main>
 </asp:Content>
