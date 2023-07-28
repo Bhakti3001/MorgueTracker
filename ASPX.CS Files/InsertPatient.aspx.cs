@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
@@ -20,12 +20,12 @@ namespace MorgueTracker3
 
         }
 
-        public static string stripStringPatient(string str)
+        public static string removeSlashesPatient(string str)
         {
             return str.Replace("\\", "");
 
         }
-        public static string stripStringEmployee(string input)
+        public static string removeSlashesEmployee(string input)
         {
             // Remove slashes before and after the string
             input = input.Trim('\\');
@@ -90,9 +90,9 @@ namespace MorgueTracker3
 
         protected void Submit_OnClick(object sender, EventArgs e)
         {
-            string PatientID = stripStringPatient(txtPatientID.Text.ToString());
+            string PatientID = removeSlashesPatient(txtPatientID.Text.ToString());
             string PatientName = txtPatientName.Text.ToString();
-            string EmployeeID = stripStringEmployee(txtEmployeeID.Text.ToString());
+            string EmployeeID = removeSlashesEmployee(txtEmployeeID.Text.ToString());
             string EmployeeName = txtEmployeeName.Text.ToString();
 
             PatientID = checkIfDigits(PatientID);

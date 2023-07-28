@@ -1,8 +1,4 @@
-
-
-// Newer Version
-
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -72,8 +68,8 @@ namespace MorgueTracker3
                     lblStatus.Visible = dt.Rows.Count == 0;
                     if (dt.Rows.Count == 0)
                     {
-                        lblStatus.Text = "No Data Found";
                         lblStatus.Attributes.Add("style", "border-color: red;");
+                        lblStatus.Text = "No Results Found.";
                     }
                 }
             }
@@ -217,5 +213,3 @@ namespace MorgueTracker3
         }
     }
 }
-
-

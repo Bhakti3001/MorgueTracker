@@ -18,17 +18,9 @@ namespace MorgueTracker3
         {
             HideLabels();
             Page.SetFocus(txtPatientID);
-
-            if (IsPostBack)
-            {
-                lblPatientNameModal.Text = Session["PatientName"] as string;
-                lblEmployeeNameModal.Text = Session["EmployeeName"] as string;
-                lblFuneralHomeModal.Text = Session["FuneralHome"] as string;
-            }
-
         }
 
-        protected string purgeSearch(string str)
+        protected string removeSlashes(string str)
         {
             str = str.Trim('\\');
             return str;
@@ -36,7 +28,7 @@ namespace MorgueTracker3
 
         protected void Search_Click(object sender, EventArgs e)
         {
-            string patientID = purgeSearch(txtPatientID.Text.Trim());
+            string patientID = removeSlashes(txtPatientID.Text.Trim());
 
             // Checks that ID is int
             if (!int.TryParse(patientID, out int parsedPatientID))
@@ -69,12 +61,7 @@ namespace MorgueTracker3
             {
                 DataRow row = dataTable.Rows[0];
 
-                // 3 cases: 
-                // 1: Patient has no morgue location and no funeral home
-                // 1: Patient info should be shown, location should show "select location",
-                // update should update all info and the release button should not be shown
-                // Case 2:  Patient has no funeral home but has morgue location
-                // 
+
 
                 isFullDetails = !row.IsNull("Out_Employee_Name");
                 isMorgueLocation = !row.IsNull("Location_In_Morgue");
@@ -95,7 +82,7 @@ namespace MorgueTracker3
                 else
                 {
                     // Patient has no location, show "Select Location" in the dropdown
-                    ddlLocationInMorgue.SelectedIndex = 0; // Assuming "Select Location" is the first item
+                    ddlLocationInMorgue.SelectedIndex = -1;
                 }
 
                 if (isFullDetails)
@@ -103,6 +90,7 @@ namespace MorgueTracker3
                     // Patient is already released
                     btnRelease.Visible = false;
                     btnUpdate.Attributes.Add("style", "width: 100%;");
+                    // Make Funeral home fields visible
                     ShowReleaseLabels();
 
                     txtFuneralHome.Text = row["Funeral_Home"].ToString();
@@ -121,7 +109,7 @@ namespace MorgueTracker3
             txtOutEmployeeID.Text = "";
         }
 
-       
+
 
         protected void Update_Click(object sender, EventArgs e)
         {
@@ -171,9 +159,9 @@ namespace MorgueTracker3
                 lblSuccessStatus.Visible = true;
                 lblSuccessStatus.Attributes.Add("style", "border-color: red;");
             }
+
             else if (int.TryParse(patientID, out int parsedPatientID) && int.TryParse(inEmployeeID, out int parsedEmployeeID))
             {
-                // Check if the patient has no location in the morgue
 
 
                 SqlCommand cmdUpdatePatientInfo = new SqlCommand("dbo.UpdatePatientInfo", conn);
@@ -195,6 +183,7 @@ namespace MorgueTracker3
                 }
                 catch (SqlException ex)
                 {
+                    lblSuccessStatus.Style.Add("border-color", "red");
                     lblSuccessStatus.Text = "An error occurred: " + ex.Message;
                     lblSuccessStatus.Visible = true;
                 }
@@ -211,9 +200,9 @@ namespace MorgueTracker3
             string locationInMorgue = ddlLocationInMorgue.SelectedItem.Text;
             if (locationInMorgue.Equals("Select Location") || ddlLocationInMorgue.SelectedValue.Equals("-1"))
             {
+                lblSuccessStatus.Style.Add("border-color", "red");
                 lblSuccessStatus.Text = "Location in Morgue Required";
                 lblSuccessStatus.Visible = true;
-                lblSuccessStatus.Style.Add("border-color", "red");
                 return;
             }
             else
@@ -249,27 +238,28 @@ namespace MorgueTracker3
                 // Input Validation
                 if (string.IsNullOrWhiteSpace(funeralHome))
                 {
-                    lblSuccessStatus.Text = "Funeral Home is required.";
                     lblSuccessStatus.Style.Add("border-color", "red");
+                    lblSuccessStatus.Text = "Funeral Home is required.";
                     lblSuccessStatus.Visible = true;
                     clearFuneralFields();
 
                     return;
                 }
 
+                // TODO maybe needs to call get slashes removed if it gets scanned
                 if (!int.TryParse(morgueEmployeeID, out int parsedMorgueEmployeeID))
                 {
-                    lblSuccessStatus.Text = "Invalid Employee ID";
                     lblSuccessStatus.Style.Add("border-color", "red");
+                    lblSuccessStatus.Text = "Invalid Employee ID";
                     lblSuccessStatus.Visible = true;
                     clearFuneralFields();
 
                     return;
                 }
-                if (!int.TryParse(purgeSearch(patientID), out int parsedPatientID))
+                if (!int.TryParse(removeSlashes(patientID), out int parsedPatientID))
                 {
-                    lblSuccessStatus.Text = "Invalid Patient ID";
                     lblSuccessStatus.Style.Add("border-color", "red");
+                    lblSuccessStatus.Text = "Invalid Patient ID";
                     lblSuccessStatus.Visible = true;
                     clearFuneralFields();
                     return;
@@ -288,7 +278,6 @@ namespace MorgueTracker3
                     lblSuccessStatus.Visible = true;
                     lblSuccessStatus.Attributes.Add("style", "border-color: red;");
                 }
-
 
 
                 else if (!nameRegex.IsMatch(funeralEmployee))
@@ -327,16 +316,16 @@ namespace MorgueTracker3
                     {
                         conn.Open();
                         cmdInsertPickedUpInfo.ExecuteNonQuery();
+                        lblSuccessStatus.Style.Add("border-color", "lightseagreen");
                         lblSuccessStatus.Text = "Patient Released!";
                         lblSuccessStatus.Visible = true;
-                        lblSuccessStatus.Attributes.Add("background-color", "lightseagreen");
 
                     }
                     catch (SqlException ex)
                     {
                         lblSuccessStatus.Text = "An error occurred: " + ex.Message;
-                        lblSuccessStatus.Visible = true;
                         lblSuccessStatus.Attributes.Add("background-color", "red");
+                        lblSuccessStatus.Visible = true;
                         clearFuneralFields();
 
                     }
