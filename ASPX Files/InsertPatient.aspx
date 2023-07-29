@@ -3,7 +3,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <main>
         <section class="row justify-content-center" aria-labelledby="insertPatientTitle">
-            <div class="col-md-8 text-center">
+            <div class="col-lg-9 text-center">
                 <h1 id="insertPatientTitle">Insert Patient</h1>
                 <div class="container">
                     <hr />
@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-group">
                                 <asp:Label ID="lbPatientName" runat="server">Patient Name</asp:Label>
-                                <asp:TextBox ID="txtPatientName" runat="server" class="form-control form-control-lg shadow-none mb-3"></asp:TextBox>
+                                <asp:TextBox ID="txtPatientName" runat="server" class="form-control form-control-lg shadow-none "></asp:TextBox>
                             </div>
                             <br />
                         </div>
@@ -30,14 +30,14 @@
                             </div>
                             <div class="form-group">
                                 <asp:Label ID="lblEmployeeName" CssClass="label" runat="server">Employee Name</asp:Label>
-                                <asp:TextBox ID="txtEmployeeName" runat="server" class="form-control form-control-lg shadow-none mb-3"></asp:TextBox>
+                                <asp:TextBox ID="txtEmployeeName" runat="server" class="form-control form-control-lg shadow-none "></asp:TextBox>
                             </div>
                             <br />
                         </div>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col text-end">
-                            <asp:Button ID="Submit" runat="server" Text="Upload" OnClick="Submit_OnClick" class="btn btn-primary btn-lg col-md-3 my-4"></asp:Button>
+                            <asp:Button ID="Submit" runat="server" Text="Upload" OnClick="Submit_OnClick" class="btn-media-lg btn btn-primary btn-lg col-md-3 my-5"></asp:Button>
                         </div>
                     </div>
                     <br />
@@ -47,12 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+    
 
             </div>
         </section>

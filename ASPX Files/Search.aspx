@@ -1,29 +1,28 @@
 ﻿<%@ Page Title="Search" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Search.aspx.cs" Inherits="MorgueTracker3.Search" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
+    <! TODO implement HR for form>
     <main>
-        <section class="row" aria-labelledby="searchPatientTitle">
-            <div class="col-md-10 offset-md-1 text-center">
+        <section class="row justify-content-center text-center" aria-labelledby="searchPatientTitle">
+            <div class="col-md-10 text-center">
                 <h1 id="searchPatientTitle">Search Patient</h1>
                 <div class="row justify-content-center">
                     <div class="col-md-10">
                         <hr />
-                        <br />
-                        <br />
-                        <div class="form-group row">
+
+                        <div class="form-group row mt-5 mb-3">
                             <div class="col-md-9 text-start">
                                 <asp:TextBox ID="txtPatientID" runat="server" class="form-control form-control-lg justify-content-center shadow-none" Placeholder="Scan Patient ID"></asp:TextBox>
                             </div>
-                            <div class="col-md-3 text-end">
-                                <asp:Button ID="btnSearch" class="btn btn-primary btn-lg col-md-12 " runat="server" Text="Search" OnClick="Search_Click"></asp:Button>
+                            <div class="col-md-3 text-end media-search">
+                                <asp:Button ID="btnSearch" class="btn-media btn btn-primary btn-lg col-md-12" runat="server" Text="Search" OnClick="Search_Click"></asp:Button>
                             </div>
                         </div>
-                        <br />
+
                         <asp:Panel ID="hrResult" runat="server" CssClass="horizontal-line" Visible="true"></asp:Panel>
-                        <br />
+
                         <div class="row">
-                            <div class="col text-start">
+                            <div class="col text-start mt-2">
                                 <div class="form-group">
                                     <asp:Label ID="lblPatientName" CssClass="label" runat="server">Patient Name:</asp:Label>
                                     <asp:TextBox ID="txtPatientName" class="form-control form-control-lg mb-4 shadow-none" runat="server"></asp:TextBox>
@@ -33,7 +32,7 @@
                                     <asp:TextBox ID="txtEmployeeName" class="form-control form-control-lg mb-4 shadow-none" runat="server"></asp:TextBox>
                                 </div>
                             </div>
-                            <div class=" col text-start">
+                            <div class=" col text-start mt-2">
                                 <div class="form-group">
                                     <asp:Label ID="lblEmployeeID" CssClass="label" runat="server">Onboarding Employee ID:</asp:Label>
                                     <asp:TextBox ID="txtEmployeeID" class="form-control form-control-lg mb-4 shadow-none" runat="server"></asp:TextBox>
@@ -44,11 +43,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group justify-content-center my-3">
-                            <asp:Label ID="lblLocationInMorgue" runat="server" Style="left: -20px; text-align: start">Location In Morgue:</asp:Label>
-                            <div class="col-md-6">
+                        <div class="row form-group justify-content-center ">
+                            <asp:Label ID="lblLocationInMorgue" runat="server" class="label text-start" Style="padding-left: 13px">Location In Morgue:</asp:Label>
+                            <div class="col-md-6 ">
                                 <div class="input-group">
-                                    <asp:DropDownList ID="ddlLocationInMorgue" runat="server" class="form-control form-control-lg justify-content-center shadow-none">
+                                    <asp:DropDownList ID="ddlLocationInMorgue" Style="color: #808080" runat="server" class="form-control form-control-lg justify-content-center shadow-none ">
 
                                         <asp:ListItem Enabled="true" Text="Select Location" Value="-1"></asp:ListItem>
                                         <asp:ListItem Value="Walk-In Left" Text="Walk-In Left"></asp:ListItem>
@@ -64,17 +63,16 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="media-search col-md-6">
                                 <div class="d-flex justify-content-between">
                                     <asp:Button ID="btnUpdate" CssClass="btn btn-primary btn-lg flex-fill me-2" runat="server" Text="Update" OnClick="Update_Click" />
-                                    <asp:Button ID="btnRelease" CssClass="btn btn-primary btn-lg flex-fill ms-2" runat="server" Text="Release" OnClick="Release_Click" />
+                                    <asp:Button ID="btnRelease" CssClass="btn btn-primary btn-lg flex-fill ms-2" runat="server" Text="Release" OnClick="Release_Click"/>
                                 </div>
                             </div>
                         </div>
+                        <asp:Panel runat="server" ID="hrLine" CssClass=" hr-line mt-5 mb-4"></asp:Panel>
 
-                        <asp:Panel ID="hrResult2" runat="server" CssClass="horizontal-line" Visible="false"></asp:Panel>
-                        <br />
-                        <br />
+
                         <div class="row">
                             <div class="col text-start">
                                 <div class="form-group">
@@ -83,7 +81,7 @@
                                 </div>
                                 <div class="form-group">
                                     <asp:Label ID="lblFuneralHomeEmployee" CssClass="label" runat="server">Funeral Home Employee:</asp:Label>
-                                    <asp:TextBox ID="txtFuneralHomeEmployee" class="form-control form-control-lg mb-4 shadow-none" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txtFuneralHomeEmployee" class="form-control form-control-lg mb-5 shadow-none" runat="server"></asp:TextBox>
                                 </div>
                             </div>
                             <div class="col text-start">
@@ -94,7 +92,7 @@
                                 </div>
                                 <div class="form-group">
                                     <asp:Label ID="lblOutEmployeeName" CssClass="label" runat="server">Releasing Employee Name: </asp:Label>
-                                    <asp:TextBox ID="txtOutEmployeeName" class="form-control form-control-lg mb-4 shadow-none" runat="server"></asp:TextBox>
+                                    <asp:TextBox ID="txtOutEmployeeName" class="form-control form-control-lg mb-5 shadow-none" runat="server"></asp:TextBox>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +100,7 @@
                             <div class="col-md-9">
                             </div>
                             <div class="col-md-3">
-                                <asp:Button ID="btnSubmit" CssClass="btn btn-primary btn-lg col-md-12" runat="server" Text="Submit" data-bs-toggle="modal" data-bs-target="#confirmationModal" OnClientClick="return false;" />
+                                <asp:Button ID="btnSubmit" CssClass="btn-media btn btn-primary btn-lg col-md-12 mb-5" runat="server" Text="Submit" data-bs-toggle="modal" data-bs-target="#confirmationModal" OnClientClick="return false;" />
                             </div>
                         </section>
                         <div id="confirmationModal" class="modal fade" tabindex="-1" role="dialog">
@@ -120,24 +118,21 @@
 
                                         <div class="d-flex justify-content-end">
                                             <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Return</button>
-                                            <asp:Button ID="btnSubmitConfirm" CssClass="btn btn-primary" runat="server" Text="Yes" OnClick="Submit_Click" />
+                                            <asp:Button ID="btnSubmitConfirm" CssClass="btn-media-lg btn btn-primary" runat="server" Text="Yes" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <asp:Label ID="lblSuccessStatus" runat="server" class="form-control form-control-lg mb-4 col-md-3 p-5"></asp:Label>
+                        <asp:Label ID="lblSuccessStatus" runat="server" class="form-control form-control-lg mb-5 col-md-3 p-5"></asp:Label>
                     </div>
 
                 </div>
-                <br />
-                <br />
-                <br />
-                <br />
+    
             </div>
 
         </section>
     </main>
 
-  
+
 </asp:Content>

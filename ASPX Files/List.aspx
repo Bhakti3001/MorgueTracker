@@ -7,31 +7,27 @@
         <section class="row justify-content-center" aria-labelledby="listPatientsTitle">
             <div class="col-12 mt-3">
                 <div class="row">
-                    <div class="col-md-3 pr-1 d-flex flex-column align-items-start">
-                        <asp:Label ID="lblStartDate" runat="server" Text="Start Date:" Style="font-family: 'Microsoft JhengHei', sans-serif; font-weight: bold; font-size: 15px"></asp:Label>
-                        <asp:TextBox ID="txtStartDate" runat="server" TextMode="Date" AutoPostBack="true" OnTextChanged="SearchByDate_Click" CssClass="date-picker" />
+                    <div class="col-md-3 d-flex flex-column align-items-start">
+                        <asp:Label ID="lblStartDate" runat="server" Text="Start Date:" class="date-picker-label" ></asp:Label>
+                        <asp:TextBox ID="txtStartDate" runat="server" TextMode="Date" AutoPostBack="true" CssClass="date-picker" />
                     </div>
-                    <div class="col-md-7 d-flex flex-column align-items-left">
-                        <asp:Label ID="lblEndDate" runat="server" Text="End Date:" CssClass="left-align-label" Style="font-family: 'Microsoft JhengHei', sans-serif; font-weight: bold; font-size: 15px"></asp:Label>
-                        <asp:TextBox ID="txtEndDate" runat="server" TextMode="Date" AutoPostBack="true" OnTextChanged="SearchByDate_Click" CssClass="date-picker"  />
+                    <div class="col-md-7 d-flex flex-column align-items-start">
+                        <asp:Label ID="lblEndDate" runat="server" Text="End Date:" class="date-picker-label" ></asp:Label>
+                        <asp:TextBox ID="txtEndDate" runat="server" TextMode="Date" AutoPostBack="true" CssClass="date-picker"  />
                     </div>
-                    <div class="col-md-2 d-flex flex-column align-items-end">
-                        <div class="form-group">
-                            <br />
-                            <asp:CheckBox ID="PickUpCheck" runat="server" OnCheckedChanged="SearchByDate_Click" AutoPostBack="true" Style="text-align: right;" />
-                            <asp:Label ID="PickUpLabel" runat="server" Text="Picked Up" Style="font-family: 'Microsoft JhengHei', sans-serif; font-weight: bold; font-size: 15px" AssociatedControlID="PickUpCheck" />
+                    <div class="picked-up col-md-2 d-flex flex-column ">
+                        <div class="form-group mt-4">
+                            <asp:CheckBox ID="PickUpCheck" runat="server" AutoPostBack="true" />
+                            <asp:Label ID="PickUpLabel" runat="server" Text="Picked Up" class="date-picker-label" AssociatedControlID="PickUpCheck" />
                         </div>
                     </div>
                     <br />
                 </div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <asp:Label ID="lblStatus" runat="server" CssClass="form-control form-control-lg text-center mb-4 col-md-3 p-5" Visible="false"></asp:Label>
+       
+                <asp:Label ID="lblStatus" runat="server" CssClass="form-control form-control-lg text-center my-5 col-md-3 p-5" ></asp:Label>
+             
             </div>
-            <asp:GridView ID="gvList" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-light custom-table" AllowPaging="true" PageSize="5" OnPageIndexChanging="gvList_PageIndexChanging">
-                <PagerSettings Position="Bottom" />
+            <asp:GridView ID="gvList" runat="server" AutoGenerateColumns="true" CssClass="table table-bordered table-light custom-table my-5    x" >
 
                 <Columns>
                     <asp:BoundField DataField="Patient_Name" HeaderText="Patient Name" ItemStyle-Width="120" />
@@ -47,17 +43,11 @@
                     <asp:BoundField DataField="Picked_Up_Date" HeaderText="Picked Up Date" ItemStyle-Width="180" />
                 </Columns>
             </asp:GridView>
-            <br />
-            <br />
-            <br />
-            <div class="row d-flex justify-content-end">
-                <asp:Button ID="btnExport" runat="server" CssClass="col-md-3 btn btn-primary btn-lg" Text="Export to Excel" OnClick="btnExport_Click" />
+
+            <div class="row d-flex justify-content-end ">
+                <asp:Button ID="btnExport" runat="server" CssClass="col-md-3 btn btn-primary btn-lg mb-5" Text="Export to Excel" OnClick="btnExport_Click" />
             </div>
         </section>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
+
     </main>
 </asp:Content>
