@@ -1,4 +1,4 @@
-﻿/* Wrapping element */
+﻿﻿ /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
     margin-top: 15px;
@@ -29,6 +29,11 @@
     font-size: 15px;
 }
 
+.date-picler-label {
+    font-family: 'Microsoft JhengHei', sans-serif;
+    font-weight: bold;
+    font-size: 15px
+}
 
 
 @media screen and (max-width: 300px) {
@@ -40,28 +45,39 @@
     }
 }
 
-@media screen and (max-width: 991px) {
-    .col-md-10 {
-        width: 100%;
-    }
-    .date-picker{
-        width: 100px;
+@media screen and (max-width: 992px) {
+
+
+    .container {
+        left: 1.2rem;
     }
 
-    .form-group row {
+    .date-picker {
+        width: 160px;
+    }
+
+    .btn-media-insert {
         width: 100%;
     }
 
-    #MainContent_btnSearch {
-    }
+
 }
 
 
-@media screen and (max-width: 911px) {
-    .col-10 {
+@media screen and (max-width: 767px){
+    .media-search{
+        margin-top: 20px;
+    }
+    .btn-media-lg {
         width: 100%;
     }
+    
 }
+.btn-media-lg{
+    width: 100%;
+}
+
+
 
 .horizontal-line {
     width: 100%;
@@ -167,14 +183,7 @@ hr {
 .label {
     padding: 2px;
     color: #555;
-    /*
-    position: absolute;
-    top: 10px;
-    left: 13px;
-    background-color: white;
-    border-radius: 6px;
-    transition: all 0.3s;
-*/
+
 }
 
 .form-group:focus .label {
@@ -185,4 +194,10 @@ hr {
 .custom-table th {
     background-color: lightseagreen !important;
     color: white !important;
+}
+
+.hr-line {
+    width: 100%;
+    height: 1px;
+    background-color: #ced4da;
 }
