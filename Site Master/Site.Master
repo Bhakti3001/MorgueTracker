@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/datetimepicker@2.5.22/jquery.datetimepicker.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
 
 </head>
 
@@ -54,9 +54,9 @@
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a id="linkInsert" runat="server" class="nav-link" href="~/InsertPatient">Insert  </a></li>
+                        <li class="nav-item"><a id="linkInsert"  runat="server" class="nav-link" href="~/InsertPatient">Intake</a></li>
                         <li class="nav-item"><a id="linkSearch" runat="server" class="nav-link" href="~/Search">Search</a></li>
-                        <li class="nav-item"><a id="linkList" runat="server" class="nav-link" href="List">List</a></li>
+                        <li class="nav-item"><a id="linkList" runat="server" class="nav-link" href="List">Records</a></li>
                     </ul>
                 </div>
 
@@ -69,7 +69,7 @@
         <br />
         <br />
         <footer class="footer footer-light navbar-expand-sm">
-            <hr />
+            <asp:Panel runat="server" ID="hrLine" CssClass="hr-line"></asp:Panel>
             <div class="container py-3">
                 <span>&copy; <%: DateTime.Now.Year %> - McLeod Health</span>
             </div>
