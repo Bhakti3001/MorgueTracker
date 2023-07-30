@@ -4,40 +4,36 @@
     <main>
         <section class="row justify-content-center" aria-labelledby="insertPatientTitle">
             <div class="col-lg-9 text-center">
-                <h1 id="insertPatientTitle">Insert Patient</h1>
                 <div class="container">
-                    <hr />
-                    <br />
-                    <br />
-                    <div class="row d-flex flex-wrap text-start ">
+                    <div class="row d-flex mt-5 flex-wrap text-start ">
                         <div class="col ">
                             <div class="form-group ">
-                                <asp:Label ID="lbPatientID" runat="server">Patient ID</asp:Label>
+                                <asp:Label ID="lbPatientID" CssClass="label" runat="server">Patient ID</asp:Label>
                                 <asp:TextBox ID="txtPatientID" runat="server" class="form-control form-control-lg justify-content-center shadow-none mb-3"></asp:TextBox>
                                 <br />
                             </div>
                             <div class="form-group">
-                                <asp:Label ID="lbPatientName" runat="server">Patient Name</asp:Label>
-                                <asp:TextBox ID="txtPatientName" runat="server" class="form-control form-control-lg shadow-none "></asp:TextBox>
+                                <asp:Label ID="lbPatientName" CssClass="label" runat="server">Patient Name</asp:Label>
+                                <asp:TextBox ID="txtPatientName" runat="server" class="form-control form-control-lg shadow-none mb-4"></asp:TextBox>
                             </div>
                             <br />
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <asp:Label ID="lblEmployeeID" runat="server">Employee ID</asp:Label>
+                                <asp:Label ID="lblEmployeeID" CssClass="label" runat="server">Employee ID</asp:Label>
                                 <asp:TextBox ID="txtEmployeeID" runat="server" class="form-control form-control-lg justify-content-center shadow-none mb-3"></asp:TextBox>
                                 <br />
                             </div>
                             <div class="form-group">
                                 <asp:Label ID="lblEmployeeName" CssClass="label" runat="server">Employee Name</asp:Label>
-                                <asp:TextBox ID="txtEmployeeName" runat="server" class="form-control form-control-lg shadow-none "></asp:TextBox>
+                                <asp:TextBox ID="txtEmployeeName" runat="server" class="form-control form-control-lg shadow-none mb-4"></asp:TextBox>
                             </div>
                             <br />
                         </div>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col text-end">
-                            <asp:Button ID="Submit" runat="server" Text="Upload" OnClick="Submit_OnClick" class="btn-media-lg btn btn-primary btn-lg col-md-3 my-5"></asp:Button>
+                            <asp:Button ID="Submit" runat="server" OnClick="Submit_OnClick" Text="Upload" class="btn-media-lg btn btn-primary btn-lg col-md-3 mb-5 "></asp:Button>
                         </div>
                     </div>
                     <br />
@@ -47,8 +43,6 @@
                         </div>
                     </div>
                 </div>
-    
-
             </div>
         </section>
     </main>
