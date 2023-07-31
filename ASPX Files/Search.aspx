@@ -4,10 +4,6 @@
     <! TODO 
     implement HR for release info
     make sure update and release buttons render conditionally properly
-    make sure any employee id thing gets slashes removed
-    do error checks for empty patient name and empty patient name for update (half done i think)
-    auto scroll down when release is pressed?
-    figure out why search changes the navbar and the footer
     >
     <main>
         <section class="row justify-content-center" aria-labelledby="searchPatientTitle">
@@ -17,7 +13,7 @@
                     <div class="row d-flex  flex-wrap justify-content-center ">
                         <div class="col-md-10">
 
-                            <div class="form-group row mt-5 mb-3">
+                            <div class="form-group row mt-1 mb-3">
                                 <div class="col-md-9 text-start">
                                     <asp:TextBox ID="txtPatientID" runat="server" class="form-control form-control-lg justify-content-center shadow-none" Placeholder="Scan Patient ID"></asp:TextBox>
                                 </div>
@@ -55,7 +51,7 @@
                                 <asp:Label ID="lblLocationInMorgue" runat="server" class="label text-start" Style="padding-left: 13px">Location In Morgue:</asp:Label>
                                 <div class="col-md-6 ">
                                     <div class="input-group">
-                                        <asp:DropDownList ID="ddlLocationInMorgue" Style="color: #808080" runat="server" class="form-control form-control-lg justify-content-center shadow-none ">
+                                        <asp:DropDownList ID="ddlLocationInMorgue" Style="color: #333" runat="server" class="form-control form-control-lg justify-content-center shadow-none ">
                                             <asp:ListItem Enabled="true" Text="Select Location" Value="-1"></asp:ListItem>
                                             <asp:ListItem Value="Walk-In Left" Text="Walk-In Left"></asp:ListItem>
                                             <asp:ListItem Value="Walk-In Right" Text="Walk-In Right"></asp:ListItem>
@@ -123,7 +119,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <asp:Label ID="lblSuccessStatus" runat="server" class="form-control form-control-lg mb-5 col-md-3 p-5"></asp:Label>
+                            <asp:Label ID="lblSuccessStatus" runat="server" class="form-control form-control-lg mb-5 col-md-3 p-5 text-center"></asp:Label>
                         </div>
 
                     </div>
@@ -151,7 +147,7 @@
                 showConfirmationModal();
             });
         });
-</script>
+    </script>
 
 
 </asp:Content>
