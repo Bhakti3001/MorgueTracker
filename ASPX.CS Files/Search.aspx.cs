@@ -379,12 +379,8 @@ namespace MorgueTracker3
                 else
                 {
 
-
-
                     SqlCommand cmdInsertPickedUpInfo = new SqlCommand("dbo.InsertPickedUpInfo", conn);
                     cmdInsertPickedUpInfo.CommandType = CommandType.StoredProcedure;
-
-
 
                     cmdInsertPickedUpInfo.Parameters.AddWithValue("@Patient_ID", parsedPatientID);
                     cmdInsertPickedUpInfo.Parameters.AddWithValue("@Funeral_Home", funeralHome);
@@ -435,54 +431,67 @@ namespace MorgueTracker3
 
         private void HideLabels()
         {
+            hrLine.Visible = false;
+            
             txtPatientName.Visible = false;
             txtEmployeeID.Visible = false;
             txtEmployeeName.Visible = false;
-            txtFuneralHome.Visible = false;
-            txtOutEmployeeName.Visible = false;
-            lblSuccessStatus.Visible = false;
-            btnUpdate.Visible = false;
-            txtFuneralHomeEmployee.Visible = false;
             pCreatedDate.Visible = false;
-            txtOutEmployeeID.Visible = false;
-
+            
             lblPatientName.Visible = false;
             lblEmployeeID.Visible = false;
             lblEmployeeName.Visible = false;
+            lblCreatedDate.Visible = false;
+            
+            ddlLocationInMorgue.Visible = false;
+            lblLocationInMorgue.Visible = false;
+            
+            btnUpdate.Visible = false;
+            btnRelease.Visible = false;
+            
+            hrLine2.Visible = false;
+            
+            txtFuneralHome.Visible = false;
+            txtFuneralHomeEmployee.Visible = false;
+            txtOutEmployeeName.Visible = false;
+            txtOutEmployeeID.Visible = false;
+            
             lblFuneralHome.Visible = false;
             lblFuneralHomeEmployee.Visible = false;
             lblOutEmployeeName.Visible = false;
-            lblCreatedDate.Visible = false;
             lblOutEmployeeID.Visible = false;
-            ddlLocationInMorgue.Visible = false;
+            
             btnSubmit.Visible = false;
-            btnRelease.Visible = false;
-            lblLocationInMorgue.Visible = false;
-            hrResult.Visible = false;
-            hrLine.Visible = false;
+            
+            lblSuccessStatus.Visible = false;
+            
         }
 
         private void ShowLabels()
         {
+            hrLine2.Visible = true;
+            
             txtPatientName.Visible = true;
             txtEmployeeID.Visible = true;
             txtEmployeeName.Visible = true;
             pCreatedDate.Visible = true;
 
-            btnUpdate.Visible = true;
-
             lblPatientName.Visible = true;
             lblEmployeeID.Visible = true;
             lblEmployeeName.Visible = true;
             lblCreatedDate.Visible = true;
-            hrResult.Visible = true;
+
             ddlLocationInMorgue.Visible = true;
-            btnRelease.Visible = true;
             lblLocationInMorgue.Visible = true;
+            
+            btnUpdate.Visible = true;
+            btnRelease.Visible = true;
         }
 
         private void ShowReleaseLabels()
         {
+            hrLine.Visible = true;
+            
             txtFuneralHome.Visible = true;
             txtFuneralHomeEmployee.Visible = true;
             txtOutEmployeeName.Visible = true;
@@ -493,7 +502,6 @@ namespace MorgueTracker3
             lblOutEmployeeName.Visible = true;
             lblOutEmployeeID.Visible = true;
 
-            hrLine.Visible = true;
             btnSubmit.Visible = true;
         }
     }
