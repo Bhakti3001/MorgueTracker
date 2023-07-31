@@ -114,12 +114,6 @@ namespace MorgueTracker3
                 lbStatus.Attributes.Add("style", "border-color: red;");
             }
 
-            // input validation for existing patient ID
-            else if (count > 0)
-            {
-                lbStatus.Text = "Patient ID already exists";
-                lbStatus.Visible = true;
-            }
 
             // input validation for names
             // allows normal letters, numbers, accented letters, spaces, commas, apotrophes, and dashes
@@ -171,10 +165,21 @@ namespace MorgueTracker3
                         lbStatus.Attributes.Add("style", "border-color: lightseagreen;");
                     }
                     catch
+
                     {
-                        lbStatus.Text = "Patient Upload Failed";
                         lbStatus.Visible = true;
                         lbStatus.Attributes.Add("style", "border-color: red;");
+                        // input validation for existing patient ID
+                        if (count > 0)
+                        {
+                            lbStatus.Text = "Patient ID already exists";
+                            
+                        }
+                        else
+                        {
+                            lbStatus.Text = "Patient Upload Failed";
+                            
+                        }
                     }
                     finally
                     {
