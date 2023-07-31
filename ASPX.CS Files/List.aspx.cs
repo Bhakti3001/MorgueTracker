@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -21,6 +22,9 @@ namespace MorgueTracker3
             }
         }
 
+        /*
+         * Method for picking the date button(s) which then populates the table.
+         */
         protected void SearchByDate_Click(object sender, EventArgs e)
         {
             BindGridView();
@@ -32,6 +36,9 @@ namespace MorgueTracker3
             BindGridView();
         }
 
+        /*
+         * Method for getting data from the database and binding a grid view
+         */
         private void BindGridView()
         {
             bool isPickedUp = PickUpCheck.Checked;
@@ -68,13 +75,16 @@ namespace MorgueTracker3
                     lblStatus.Visible = dt.Rows.Count == 0;
                     if (dt.Rows.Count == 0)
                     {
+                        lblStatus.Text = "No Data Found";
                         lblStatus.Attributes.Add("style", "border-color: red;");
-                        lblStatus.Text = "No Results Found.";
                     }
                 }
             }
         }
 
+        /*
+         * Method for building a query depending on the date picked by the user and whether picked up box is checked or not.
+         */
         private string BuildQuery(bool isPickedUp, string startDate, string endDate)
         {
             string query = selectAll + "FROM MorgueTracker ";
@@ -106,6 +116,9 @@ namespace MorgueTracker3
             return query;
         }
 
+        /*
+         * Method for downloading the data when export button is clicked on screen.
+         */
         protected void btnExport_Click(object sender, EventArgs e)
         {
             int pageSize = gvList.PageSize;
@@ -132,6 +145,9 @@ namespace MorgueTracker3
             BindGridView();
         }
 
+        /*
+         * Method for exporting the data into an excel file.
+         */
         private void ExportGridToExcel(string dateTimeWithHyphens)
         {
             string pickedUp = PickUpCheck.Checked ? "Picked_Up" : "Not_Picked_Up";
@@ -139,20 +155,25 @@ namespace MorgueTracker3
 
             Response.Clear();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment;filename=" + fileName);
+            Response.AddHeader("content-disposition", "attachment;filename=" + fileName); //telling the browser that the content should be treated
+                                                                                          //as an attachment that will be downloaded and saved locally.
+                                                                                          //The filename of this download is set to the fileName string.
             Response.Charset = "";
-            Response.ContentType = "application/vnd.ms-excel";
+            Response.ContentType = "application/vnd.ms-excel"; // signifies Excel data.
 
             using (StringWriter sw = new StringWriter())
             {
                 HtmlTextWriter hw = new HtmlTextWriter(sw);
                 StyleGridForExport(hw);
-                Response.Output.Write(sw.ToString());
+                Response.Output.Write(sw.ToString()); //the data that the client will receive.
                 Response.Flush();
                 Response.End();
             }
         }
 
+        /*
+         * Method for getting the formatted file name (.xls).
+         */
         private string GetExportFileName(string pickedUp, string dateTimeWithHyphens)
         {
             string startDateText = txtStartDate.Text;
@@ -187,6 +208,9 @@ namespace MorgueTracker3
             }
         }
 
+        /*
+         * Method for styling the downloaded excel spreadsheet.
+         */
         private void StyleGridForExport(HtmlTextWriter hw)
         {
             gvList.HeaderRow.Style.Add("background-color", "#edfbfb");
@@ -198,18 +222,22 @@ namespace MorgueTracker3
                 foreach (TableCell cell in row.Cells)
                 {
                     cell.CssClass = "textmode";
-                    cell.Attributes.Add("style", "mso-number-format:\\@");
+                    cell.Attributes.Add("style", "mso-number-format:\\@"); //Microsoft office specific css format
                 }
             }
 
             gvList.RenderControl(hw);
         }
 
-
         public override void VerifyRenderingInServerForm(Control control)
         {
-            /* Confirms that an HtmlForm control is rendered for the specified ASP.NET
+            /*
+             * NEED THIS METHOD IN ORDER TO MAKE GetExportFileName() METHOD WORK!!
+             * 
+             * Confirms that an HtmlForm control is rendered for the specified ASP.NET
                server control at run time. */
         }
     }
 }
+
+
