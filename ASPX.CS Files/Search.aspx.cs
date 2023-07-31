@@ -177,7 +177,7 @@ namespace MorgueTracker3
                 {
                     conn.Open();
                     cmdUpdatePatientInfo.ExecuteScalar();
-                    lblSuccessStatus.Style.Add("border-color", "lightseagreen");
+                   lblSuccessStatus.Style.Add("style", "border-color: lightseagreen;");
                     lblSuccessStatus.Text = "Information Updated!";
                     lblSuccessStatus.Visible = true;
                 }
@@ -185,6 +185,7 @@ namespace MorgueTracker3
                 {
                     lblSuccessStatus.Style.Add("border-color", "red");
                     lblSuccessStatus.Text = "An error occurred: " + ex.Message;
+                    lblSuccessStatus.Style.Add("style", "border-color: red;");
                     lblSuccessStatus.Visible = true;
                 }
                 finally
