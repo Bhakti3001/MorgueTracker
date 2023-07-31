@@ -121,6 +121,10 @@ html, body {
 .picked-up {
     margin-top: 30px;
 }
+.picked-up .form-group{
+    text-align: end;
+
+}
 
 .me-3 {
     margin-right: .7rem !important;
@@ -142,6 +146,13 @@ html, body {
     color: white !important;
 }
 
+.no-wrap-label {
+    white-space: nowrap;
+}
+
+.form-check-inline{
+    text-align: end;
+}
 
 
 @media screen and (max-width: 300px) {
@@ -152,28 +163,20 @@ html, body {
         margin-right: 5px;
     }
 }
+@media screen and (max-width: 576px){
 
-@media screen and (max-width: 450px) {
-    .date-pickers-container {
-        display: flex;
-        flex-wrap: wrap;
+    .form-check-inline {
+        text-align: start;
     }
 
-    .date-pickers-container > * {
-        flex: 0 0 100%;
-        margin-bottom: 10px;
+
+    .form-check{
+        padding: 0px;
+        white-space: nowrap;
     }
 }
 
-/* New styles to keep the "picked-up" group together and wrap to a new row */
-.date-pickers-container .form-group {
-    display: flex;
-    flex-wrap: wrap;
-}
 
-    .date-pickers-container .form-group > * {
-        flex: 0 0 100%;
-    }
 
 @media screen and (max-width: 767px) {
 
@@ -182,15 +185,6 @@ html, body {
         width: 100%;
     }
 
-
-    /* for changing row direction on results page for query selectors*/
-    .row > .start-date,
-    .row > .end-date,
-    .row > .picked-up {
-        flex-basis: 0;
-        flex-grow: 1;
-        max-width: 100%;
-    }
 
     .nav-link {
         font-size: 25px;
@@ -211,6 +205,14 @@ html, body {
 
 @media screen and (max-width: 991px) {
 
+    /* for changing row direction on results page for query selectors*/
+    .row > .start-date,
+    .row > .end-date,
+    .row > .picked-up {
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: 100%;
+    }
 
     .date-picker {
         width: 140px;
@@ -223,4 +225,6 @@ html, body {
     .btn-media-lg {
         width: 100%;
     }
+
+ 
 }
