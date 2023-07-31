@@ -22,7 +22,7 @@
                                 </div>
                             </div>
 
-                            <asp:Panel ID="hrResult" runat="server" CssClass="horizontal-line" Visible="true"></asp:Panel>
+                            <asp:Panel runat="server" ID="hrLine2" CssClass=" hr-line mb-4 mt-5"></asp:Panel>
 
                             <div class="row">
                                 <div class="col text-start mt-2">
