@@ -93,7 +93,7 @@ html, body {
 .btn {
     background-color: lightseagreen;
     border: none;
-    border-radius: 6px;
+    border-radius: 3px;
 }
 
     .btn:hover {
