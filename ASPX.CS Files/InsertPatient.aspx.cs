@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.UI;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Security.Policy;
 
 
 namespace MorgueTracker3
@@ -25,6 +26,7 @@ namespace MorgueTracker3
             return str.Replace("\\", "");
 
         }
+
         public static string removeSlashesEmployee(string input)
         {
             // Remove slashes before and after the string
@@ -65,27 +67,38 @@ namespace MorgueTracker3
             return input;
         }
 
-        private string checkIfDigits(string input)
+        private string idValidation(string input)
         {
             // Match any non-digit characters using regex
             Match match = Regex.Match(input, @"^(?:\d+|\\(\d+)\\)$");
 
-
-            // If there are any non-digit characters, display an error message
+            // if there are any non-digit characters, display an error message
             if (!match.Success)
             {
-                //string errorMessage = "Patient ID and Employee ID should only contain numbers (0-9).";
-                //Page.ClientScript.RegisterStartupScript(this.GetType(), "ErrorAlert", $"alert('{errorMessage}');", true);
-
                 lbStatus.Text = "Invalid Patient ID or Employee ID";
                 lbStatus.Visible = true;
                 lbStatus.Attributes.Add("style", "border-color: red;");
                 return string.Empty; // Return an empty string to indicate an error
             }
 
+
+
+            // if number is too big, display error
+            else if (double.Parse(input) > int.MaxValue)
+            {
+                lbStatus.Text = "Invalid Patient ID or Employee ID";
+                lbStatus.Visible = true;
+                lbStatus.Attributes.Add("style", "border-color: red;");
+                return string.Empty;
+            }
+
+
+
             // If there are no non-digit characters, return the cleaned string
             return input;
         }
+
+      
 
 
         protected void Submit_OnClick(object sender, EventArgs e)
@@ -95,8 +108,8 @@ namespace MorgueTracker3
             string EmployeeID = removeSlashesEmployee(txtEmployeeID.Text.ToString());
             string EmployeeName = txtEmployeeName.Text.ToString();
 
-            PatientID = checkIfDigits(PatientID);
-            EmployeeID = checkIfDigits(EmployeeID);
+            PatientID = idValidation(PatientID);
+            EmployeeID = idValidation(EmployeeID);
 
             // Check that Patient ID that already exists
             SqlCommand cmdCheckPatientExists = new SqlCommand("SELECT COUNT(*) FROM MorgueTracker WHERE Patient_ID = @Patient_ID", conn);
@@ -169,16 +182,17 @@ namespace MorgueTracker3
                     {
                         lbStatus.Visible = true;
                         lbStatus.Attributes.Add("style", "border-color: red;");
+
                         // input validation for existing patient ID
                         if (count > 0)
                         {
                             lbStatus.Text = "Patient ID already exists";
-                            
+
                         }
                         else
                         {
                             lbStatus.Text = "Patient Upload Failed";
-                            
+
                         }
                     }
                     finally
