@@ -101,10 +101,10 @@
                                 <div class="col-md-12 mb-2 text-md-end">
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
-                                            <asp:Button ID="btnSubmit" runat="server" Text="Upload" class="btn btn-media btn-primary btn-lg col-md-12" data-bs-toggle="modal" data-bs-target="#confirmationModal" OnClientClick="return false;"></asp:Button>
+                                            <asp:Button ID="btnDelete" runat="server" Text="Delete" class="btn btn-media btn-primary btn-lg col-md-12" data-bs-toggle="modal" data-bs-target="#deletionModal" OnClientClick="return false;"></asp:Button>
                                         </div>
                                         <div class="col-md-6 mb-4">
-                                            <asp:Button ID="btnDelete" runat="server" Text="Delete" class="btn btn-media btn-primary btn-lg col-md-12" data-bs-toggle="modal" data-bs-target="#deletionModal" OnClientClick="return false;"></asp:Button>
+                                            <asp:Button ID="btnSubmit" runat="server" Text="Upload" class="btn btn-media btn-primary btn-lg col-md-12" data-bs-toggle="modal" data-bs-target="#confirmationModal" OnClientClick="return false;"></asp:Button>
                                         </div>
                                     </div>
                                 </div>
