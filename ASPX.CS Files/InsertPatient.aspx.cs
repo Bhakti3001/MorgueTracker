@@ -18,13 +18,11 @@ namespace MorgueTracker3
         {
             lbStatus.Visible = false;
             txtPatientID.Focus();
-
         }
 
         public static string removeSlashesPatient(string str)
         {
             return str.Replace("\\", "");
-
         }
 
         public static string removeSlashesEmployee(string input)
@@ -69,10 +67,10 @@ namespace MorgueTracker3
 
         private string idValidation(string input)
         {
-            // Match any non-digit characters using regex
+            // Match any non-digit characters using regex, allows digits to be surrounded by a backward slash
             Match match = Regex.Match(input, @"^(?:\d+|\\(\d+)\\)$");
 
-            // if there are any non-digit characters, display an error message
+            // if there are any non-digit characters, display an error message and return emtpy string
             if (!match.Success)
             {
                 lbStatus.Text = "Invalid Patient ID or Employee ID";
@@ -81,9 +79,7 @@ namespace MorgueTracker3
                 return string.Empty; // Return an empty string to indicate an error
             }
 
-
-
-            // if number is too big, display error
+            // if number is too big, display error and return emtpy string
             else if (double.Parse(input) > int.MaxValue)
             {
                 lbStatus.Text = "Invalid Patient ID or Employee ID";
@@ -92,14 +88,9 @@ namespace MorgueTracker3
                 return string.Empty;
             }
 
-
-
-            // If there are no non-digit characters, return the cleaned string
+            // if input is valid, return the cleaned string
             return input;
         }
-
-      
-
 
         protected void Submit_OnClick(object sender, EventArgs e)
         {
@@ -126,7 +117,6 @@ namespace MorgueTracker3
                 lbStatus.Visible = true;
                 lbStatus.Attributes.Add("style", "border-color: red;");
             }
-
 
             // input validation for names
             // allows normal letters, numbers, accented letters, spaces, commas, apotrophes, and dashes
@@ -186,13 +176,11 @@ namespace MorgueTracker3
                         // input validation for existing patient ID
                         if (count > 0)
                         {
-                            lbStatus.Text = "Patient ID already exists";
-
+                            lbStatus.Text = "Patient ID already exists"
                         }
                         else
                         {
-                            lbStatus.Text = "Patient Upload Failed";
-
+                            lbStatus.Text = "Patient Upload Failed"
                         }
                     }
                     finally
