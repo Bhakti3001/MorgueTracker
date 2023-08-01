@@ -1,4 +1,4 @@
-﻿/* Set some basic padding to keep content from hitting the edges */
+/* Set some basic padding to keep content from hitting the edges */
 html, body {
     height: 100%;
     margin: 0;
@@ -121,10 +121,10 @@ html, body {
 .picked-up {
     margin-top: 30px;
 }
-.picked-up .form-group{
-    text-align: end;
 
-}
+    .picked-up .form-group {
+        text-align: end;
+    }
 
 .me-3 {
     margin-right: .7rem !important;
@@ -150,7 +150,7 @@ html, body {
     white-space: nowrap;
 }
 
-.form-check-inline{
+.form-check-inline {
     text-align: end;
 }
 
@@ -163,14 +163,15 @@ html, body {
         margin-right: 5px;
     }
 }
-@media screen and (max-width: 576px){
+
+@media screen and (max-width: 576px) {
 
     .form-check-inline {
         text-align: start;
     }
 
 
-    .form-check{
+    .form-check {
         padding: 0px;
         white-space: nowrap;
     }
@@ -225,6 +226,13 @@ html, body {
     .btn-media-lg {
         width: 100%;
     }
+}
 
- 
+.scrollable-gridview {
+    overflow-y: auto;
+    overflow-y: auto;
+}
+
+.auto-width {
+    width: auto;
 }
