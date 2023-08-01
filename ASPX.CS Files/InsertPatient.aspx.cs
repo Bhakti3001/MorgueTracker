@@ -30,37 +30,11 @@ namespace MorgueTracker3
             // Remove slashes before and after the string
             input = input.Trim('\\');
 
-            // Remove leading zeros
-            int leadingZeros = 0;
-            while (leadingZeros < input.Length && input[leadingZeros] == '0')
-            {
-                leadingZeros++;
-            }
+            // Remove leading and trailing zeros
+            input = Regex.Replace(input, @"^0+|0+$", "");
 
-            // Check if the leading digit is followed by exactly four zeros
-            if (leadingZeros > 0 && leadingZeros + 4 < input.Length && input[leadingZeros + 1] == '0' &&
-                input[leadingZeros + 2] == '0' && input[leadingZeros + 3] == '0' && input[leadingZeros + 4] == '0')
-            {
-                leadingZeros += 5; // Skip the leading digit and the following four zeros
-            }
-
-            input = input.Substring(leadingZeros);
-
-            // Remove trailing zeros
-            int trailingZeros = 0;
-            while (trailingZeros < input.Length && input[input.Length - 1 - trailingZeros] == '0')
-            {
-                trailingZeros++;
-            }
-
-            // Check if the last digit is preceded by exactly four zeros
-            if (trailingZeros > 0 && trailingZeros + 4 <= input.Length && input[input.Length - trailingZeros - 5] == '0' &&
-                input[input.Length - trailingZeros - 4] == '0' && input[input.Length - trailingZeros - 3] == '0' && input[input.Length - trailingZeros - 2] == '0')
-            {
-                trailingZeros += 5; // Skip the trailing four zeros and the last digit
-            }
-
-            input = input.Substring(0, input.Length - trailingZeros);
+            // Remove numbers followed by exactly four zeros
+            input = Regex.Replace(input, @"(\d)0000", "$1");
 
             return input;
         }
