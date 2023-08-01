@@ -39,7 +39,7 @@
                     <br />
                     <div class="row justify-content-center">
                         <div class="col ">
-                            <asp:Label ID="lbStatus" Visible="false" class="form-control form-control-lg mb-4 col-md-3 p-5" runat="server"></asp:Label>
+                            <asp:Label ID="lbStatus" Visible="false" class="form-control form-control-lg mb-4 col-md-3 p-5 text-center" runat="server"></asp:Label>
                         </div>
                     </div>
                 </div>
