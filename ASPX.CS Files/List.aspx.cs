@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel.Design;
+﻿
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -7,7 +7,6 @@ using System.Globalization;
 using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
 
 namespace MorgueTracker3
 {
@@ -23,6 +22,7 @@ namespace MorgueTracker3
             }
         }
 
+        // Method for picking the date button(s) which then populates the table.
         protected void SearchByDate_Click(object sender, EventArgs e)
         {
             BindGridView();
@@ -34,7 +34,9 @@ namespace MorgueTracker3
             BindGridView();
         }
 
-        // changes table based on the checkbox status, provided dates, and current date
+        // Method for getting data from the database and binding a grid view
+        
+
         private void BindGridView()
         {
             bool isPickedUp = PickUpCheck.Checked;
@@ -44,7 +46,6 @@ namespace MorgueTracker3
             string query = BuildQuery(isPickedUp, dtStartDate, dtEndDate);
             string connectionString = ConfigurationManager.ConnectionStrings["MorgueTrackerConn"].ConnectionString;
 
-            // searches database 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -79,51 +80,46 @@ namespace MorgueTracker3
             }
         }
 
-        // query changes based on dates searched by and the picked up checkbox
+        // Method for building a query depending on the date picked by the user and whether picked up box is checked or not.
+         
         private string BuildQuery(bool isPickedUp, string startDate, string endDate)
         {
             string query = selectAll + "FROM MorgueTracker ";
 
-            // if there is a date selected (either start or end date)
             if (!string.IsNullOrEmpty(startDate) || !string.IsNullOrEmpty(endDate))
             {
-                // if only start date is selected
                 if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate))
                 {
                     query += "WHERE CAST(Created_Date AS DATE) >= @startDate ";
                 }
-                // if only end date is selected
                 else if (string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
                 {
                     query += "WHERE CAST(Created_Date AS DATE) <= @endDate ";
                 }
-                // if both dates are selected
                 else
                 {
                     query += "WHERE CAST(Created_Date AS DATE) BETWEEN @startDate AND @endDate ";
                 }
-                // changes query based on if the picked up checkbox is checked or not
+
                 query += isPickedUp ? "AND Funeral_Home IS NOT NULL " : "AND Funeral_Home IS NULL ";
             }
-
-            // if there is no date selected
             else
             {
                 query += isPickedUp ? "WHERE Funeral_Home IS NOT NULL " : "WHERE Funeral_Home IS NULL ";
             }
 
-            // always put in descending order
             query += "ORDER BY Created_Date DESC";
 
             return query;
         }
 
+        // Method for downloading the data when export button is clicked on screen.
+         
         protected void btnExport_Click(object sender, EventArgs e)
         {
             int pageSize = gvList.PageSize;
             int pageIndex = gvList.PageIndex;
 
-            // turns allow paging off so the exported file has data of all pages
             gvList.AllowPaging = false;
             BindGridView();
 
@@ -139,94 +135,89 @@ namespace MorgueTracker3
                 ExportGridToExcel(dateTimeWithHyphens);
             }
 
-            // turns paging back on for the viewable table 
             gvList.AllowPaging = true;
             gvList.PageSize = pageSize;
             gvList.PageIndex = pageIndex;
             BindGridView();
         }
 
-        // exports the GridView data to an Excel file
+        
+        // Method for exporting the data into an excel file.
+         
         private void ExportGridToExcel(string dateTimeWithHyphens)
         {
-            // determines whether the table is showing picked up or not picked up based on the checkbox value
             string pickedUp = PickUpCheck.Checked ? "Picked_Up" : "Not_Picked_Up";
-
-            // gets the file name for the export based on the "pickedUp" status and current date
             string fileName = GetExportFileName(pickedUp, dateTimeWithHyphens);
 
             Response.Clear();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment;filename=" + fileName);
+            Response.AddHeader("content-disposition", "attachment;filename=" + fileName); //telling the browser that the content should be treated
+                                                                                          //as an attachment that will be downloaded and saved locally.
+                                                                                          //The filename of this download is set to the fileName string.
             Response.Charset = "";
-            Response.ContentType = "application/vnd.ms-excel";
+            Response.ContentType = "application/vnd.ms-excel"; // signifies Excel data.
 
             using (StringWriter sw = new StringWriter())
             {
                 HtmlTextWriter hw = new HtmlTextWriter(sw);
                 StyleGridForExport(hw);
-                Response.Output.Write(sw.ToString());
+                Response.Output.Write(sw.ToString()); //the data that the client will receive.
                 Response.Flush();
                 Response.End();
             }
         }
 
-        // generates file name based on dates searched by and the picked up checkbox, as well as current date
+        // Method for getting the formatted file name (.xls).
+         
         private string GetExportFileName(string pickedUp, string dateTimeWithHyphens)
         {
             string startDateText = txtStartDate.Text;
             string endDateText = txtEndDate.Text;
 
-            // if no dates given 
             if (string.IsNullOrEmpty(startDateText) && string.IsNullOrEmpty(endDateText))
             {
-                return $"{pickedUp}_MorguePatients_as_of({dateTimeWithHyphens}).xls";
+                return $"{pickedUp}_Morgue_Patients_as_of({dateTimeWithHyphens}).xls";
             }
-            // if no end date is given
             else if (string.IsNullOrEmpty(endDateText))
             {
-                // formats start date to MM-dd-yyyy
                 DateTime startDate = DateTime.ParseExact(startDateText, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 string startFormattedDateString = startDate.ToString("MM-dd-yyyy");
 
-                return $"{pickedUp}_MorguePatients({startFormattedDateString}_to_{dateTimeWithHyphens}).xls";
+                return $"{pickedUp}_Morgue_Patients({startFormattedDateString}_to_{dateTimeWithHyphens}).xls";
             }
-            // if no start date is given
             else if (string.IsNullOrEmpty(startDateText))
             {
-                // formats end date to MM-dd-yyyy
                 DateTime endDate = DateTime.ParseExact(endDateText, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 string endFormattedDateString = endDate.ToString("MM-dd-yyyy");
 
-                return $"{pickedUp}_MorguePatients_until({endFormattedDateString}).xls";
+                return $"{pickedUp}_Morgue_Patients_until({endFormattedDateString}).xls";
             }
-            // if both dates are given
             else
             {
-                // formats dates from yyyy-MM-dd to MM-dd-yyyy
                 DateTime startDate = DateTime.ParseExact(startDateText, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 string startFormattedDateString = startDate.ToString("MM-dd-yyyy");
                 DateTime endDate = DateTime.ParseExact(endDateText, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 string endFormattedDateString = endDate.ToString("MM-dd-yyyy");
 
-                return $"{pickedUp}_MorguePatients({startFormattedDateString}_to_{endFormattedDateString}).xls";
+                return $"{pickedUp}_Morgue_Patients({startFormattedDateString}_to_{endFormattedDateString}).xls";
             }
         }
 
+        
+        // Method for styling the downloaded excel spreadsheet.
+         
         private void StyleGridForExport(HtmlTextWriter hw)
         {
-            // changes header color on exported file
             gvList.HeaderRow.Style.Add("background-color", "#edfbfb");
 
             foreach (GridViewRow row in gvList.Rows)
             {
                 row.BackColor = System.Drawing.Color.White;
 
-                // makes text left-aligned
                 foreach (TableCell cell in row.Cells)
                 {
                     cell.CssClass = "textmode";
-                    cell.Attributes.Add("style", "mso-number-format:\\@");
+                    cell.Attributes.Add("style", "mso-number-format:\\@"); //Microsoft office specific css format
                 }
             }
 
@@ -235,8 +226,12 @@ namespace MorgueTracker3
 
         public override void VerifyRenderingInServerForm(Control control)
         {
-            /* confirms that an HtmlForm control is rendered for the specified ASP.NET
-               server control at run time */
+            /*
+             * NEED THIS METHOD IN ORDER TO MAKE GetExportFileName() METHOD WORK!!
+             * 
+             * Confirms that an HtmlForm control is rendered for the specified ASP.NET
+               server control at run time. */
         }
     }
 }
+

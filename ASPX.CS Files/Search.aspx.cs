@@ -26,6 +26,50 @@ namespace MorgueTracker3
             return str;
         }
 
+
+
+        public static string removeSlashesEmployee(string input)
+        {
+            // Remove slashes before and after the string
+
+            input = input.Trim('\\');
+
+            // Remove leading zeros
+            int leadingZeros = 0;
+            while (leadingZeros < input.Length && input[leadingZeros] == '0')
+            {
+                leadingZeros++;
+            }
+
+            // Check if the leading digit is followed by exactly four zeros
+            if (leadingZeros > 0 && leadingZeros + 4 < input.Length && input[leadingZeros + 1] == '0' &&
+                input[leadingZeros + 2] == '0' && input[leadingZeros + 3] == '0' && input[leadingZeros + 4] == '0')
+            {
+                leadingZeros += 5; // Skip the leading digit and the following four zeros
+            }
+
+            input = input.Substring(leadingZeros);
+
+            // Remove trailing zeros
+            int trailingZeros = 0;
+            while (trailingZeros < input.Length && input[input.Length - 1 - trailingZeros] == '0')
+            {
+                trailingZeros++;
+            }
+
+            // Check if the last digit is preceded by exactly four zeros
+            if (trailingZeros > 0 && trailingZeros + 4 <= input.Length && input[input.Length - trailingZeros - 5] == '0' &&
+                input[input.Length - trailingZeros - 4] == '0' && input[input.Length - trailingZeros - 3] == '0' && input[input.Length - trailingZeros - 2] == '0')
+            {
+                trailingZeros += 5; // Skip the trailing four zeros and the last digit
+            }
+
+            input = input.Substring(0, input.Length - trailingZeros);
+
+            return input;
+        }
+
+
         protected void Search_Click(object sender, EventArgs e)
         {
             string patientID = removeSlashes(txtPatientID.Text.Trim());
@@ -123,6 +167,8 @@ namespace MorgueTracker3
             string inEmployeeName = txtEmployeeName.Text.ToString();
             string locationInMorgue = ddlLocationInMorgue.SelectedItem.Text;
 
+
+            removeSlashesEmployee(inEmployeeID);
 
             // input validation for names
             // allows normal letters, numbers, accented letters, spaces, commas, apotrophes, and dashes
@@ -253,6 +299,7 @@ namespace MorgueTracker3
                 hrLine.Visible = true;
 
                 btnSubmit.Visible = true;
+                btnDelete.Visible = true;
                 ShowLabels();
             }
         }
@@ -266,7 +313,8 @@ namespace MorgueTracker3
                 string funeralHome = txtFuneralHome.Text.Trim().ToString();
                 string funeralEmployee = txtFuneralHomeEmployee.Text.Trim().ToString();
                 string morgueEmployee = txtOutEmployeeName.Text.Trim().ToString();
-                string morgueEmployeeID = removeSlashes(txtOutEmployeeID.Text.Trim());
+                string morgueEmployeeID = removeSlashesEmployee(txtOutEmployeeID.Text.ToString());
+
 
                 // if funeral home is empty, print error
                 if (string.IsNullOrWhiteSpace(funeralHome))
@@ -283,7 +331,7 @@ namespace MorgueTracker3
                 // removes slashes before parsing
                 if (!int.TryParse(morgueEmployeeID, out int parsedMorgueEmployeeID))
                 {
-                    lblSuccessStatus.Text = "Invalid Employee ID";
+                    lblSuccessStatus.Text = "Invalid Employee ID" + morgueEmployeeID;
                     lblSuccessStatus.Style.Add("border-color", "red");
                     lblSuccessStatus.Visible = true;
                     clearFuneralFields();
@@ -441,6 +489,7 @@ namespace MorgueTracker3
             lblOutEmployeeID.Visible = false;
 
             btnSubmit.Visible = false;
+            btnDelete.Visible = false;
 
             lblSuccessStatus.Visible = false;
 
@@ -482,6 +531,7 @@ namespace MorgueTracker3
             lblOutEmployeeID.Visible = true;
 
             btnSubmit.Visible = true;
+            btnDelete.Visible = true;
         }
     }
 }
