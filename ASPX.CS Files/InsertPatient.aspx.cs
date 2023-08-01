@@ -176,11 +176,11 @@ namespace MorgueTracker3
                         // input validation for existing patient ID
                         if (count > 0)
                         {
-                            lbStatus.Text = "Patient ID already exists"
+                            lbStatus.Text = "Patient ID already exists";
                         }
                         else
                         {
-                            lbStatus.Text = "Patient Upload Failed"
+                            lbStatus.Text = "Patient Upload Failed";
                         }
                     }
                     finally
