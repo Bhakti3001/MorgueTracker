@@ -14,6 +14,9 @@ namespace MorgueTracker3
     public partial class InsertPatient : Page
     {
         private SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["MorgueTrackerConn"].ConnectionString);
+
+        // to check if patient ID already exists
+        int count = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             lbStatus.Visible = false;
@@ -25,45 +28,18 @@ namespace MorgueTracker3
             return str.Replace("\\", "");
         }
 
-        public static string removeSlashesEmployee(string input)
+        public static string removeSlashesEmployee(string str)
         {
             // Remove slashes before and after the string
-            input = input.Trim('\\');
+            str = str.Trim('\\');
 
             // Remove leading and trailing zeros
-            input = Regex.Replace(input, @"^0+|0+$", "");
+            str = Regex.Replace(str, @"^0+|0+$", "");
 
             // Remove numbers followed by exactly four zeros
-            input = Regex.Replace(input, @"(\d)0000", "$1");
+            str = Regex.Replace(str, @"(\d)0000", "$1");
 
-            return input;
-        }
-
-        private string idValidation(string input)
-        {
-            // Match any non-digit characters using regex, allows digits to be surrounded by a backward slash
-            Match match = Regex.Match(input, @"^(?:\d+|\\(\d+)\\)$");
-
-            // if there are any non-digit characters, display an error message and return emtpy string
-            if (!match.Success)
-            {
-                lbStatus.Text = "Invalid Patient ID or Employee ID";
-                lbStatus.Visible = true;
-                lbStatus.Attributes.Add("style", "border-color: red;");
-                return string.Empty; // Return an empty string to indicate an error
-            }
-
-            // if number is too big, display error and return emtpy string
-            else if (double.Parse(input) > int.MaxValue)
-            {
-                lbStatus.Text = "Invalid Patient ID or Employee ID";
-                lbStatus.Visible = true;
-                lbStatus.Attributes.Add("style", "border-color: red;");
-                return string.Empty;
-            }
-
-            // if input is valid, return the cleaned string
-            return input;
+            return str;
         }
 
         protected void Submit_OnClick(object sender, EventArgs e)
@@ -73,16 +49,25 @@ namespace MorgueTracker3
             string EmployeeID = removeSlashesEmployee(txtEmployeeID.Text.ToString());
             string EmployeeName = txtEmployeeName.Text.ToString();
 
-            PatientID = idValidation(PatientID);
-            EmployeeID = idValidation(EmployeeID);
-
             // Check that Patient ID that already exists
             SqlCommand cmdCheckPatientExists = new SqlCommand("SELECT COUNT(*) FROM MorgueTracker WHERE Patient_ID = @Patient_ID", conn);
             cmdCheckPatientExists.Parameters.AddWithValue("@Patient_ID", PatientID);
 
-            conn.Open();
-            int count = (int)cmdCheckPatientExists.ExecuteScalar();
-            conn.Close();
+            try
+            {
+                conn.Open();
+                count = (int)cmdCheckPatientExists.ExecuteScalar();
+            }
+            catch (SqlException ex)
+            {
+                lbStatus.Style.Add("border-color", "red");
+                lbStatus.Text = "An error occurred: " + ex.Message;
+                lbStatus.Visible = true;
+            }
+            finally
+            {
+                conn.Close();
+            }
 
             // input validation for empty patient ID
             if (string.IsNullOrEmpty(txtPatientID.Text))
@@ -90,6 +75,28 @@ namespace MorgueTracker3
                 lbStatus.Text = "Please Input a Patient ID";
                 lbStatus.Visible = true;
                 lbStatus.Attributes.Add("style", "border-color: red;");
+
+                return;
+            }
+
+            // if ID cannot be parsed to an int, print error
+            if (!int.TryParse(PatientID, out int parsedPatientID))
+            {
+                lbStatus.Text = "Invalid Patient ID";
+                lbStatus.Style.Add("border-color", "red");
+                lbStatus.Visible = true;
+
+                return;
+            }
+
+            // if ID cannot be parsed to an int, print error
+            if (!int.TryParse(EmployeeID, out int parsedEmployeeID))
+            {
+                lbStatus.Text = "Invalid Employee ID";
+                lbStatus.Style.Add("border-color", "red");
+                lbStatus.Visible = true;
+
+                return;
             }
 
             // input validation for names
@@ -124,45 +131,41 @@ namespace MorgueTracker3
                 SqlCommand cmdInsertMorguePatient = new SqlCommand("InsertMorguePatient", conn);
                 cmdInsertMorguePatient.CommandType = System.Data.CommandType.StoredProcedure;
 
-                if (int.TryParse(PatientID, out int parsedPatientID) && int.TryParse(EmployeeID, out int parsedEmployeeID))
+                cmdInsertMorguePatient.Parameters.AddWithValue("@Patient_ID", parsedPatientID);
+                cmdInsertMorguePatient.Parameters.AddWithValue("@Patient_Name", PatientName);
+                cmdInsertMorguePatient.Parameters.AddWithValue("@In_Employee_ID", parsedEmployeeID);
+                cmdInsertMorguePatient.Parameters.AddWithValue("@In_Employee_Name", EmployeeName);
+                cmdInsertMorguePatient.Parameters.AddWithValue("@Created_Date", DateTime.Now.ToString());
+
+                try
                 {
-                    cmdInsertMorguePatient.Parameters.AddWithValue("@Patient_ID", parsedPatientID);
-                    cmdInsertMorguePatient.Parameters.AddWithValue("@Patient_Name", PatientName);
-                    cmdInsertMorguePatient.Parameters.AddWithValue("@In_Employee_ID", parsedEmployeeID);
-                    cmdInsertMorguePatient.Parameters.AddWithValue("@In_Employee_Name", EmployeeName);
-                    cmdInsertMorguePatient.Parameters.AddWithValue("@Created_Date", DateTime.Now.ToString());
+                    conn.Open();
+                    cmdInsertMorguePatient.ExecuteNonQuery();
 
-                    try
+                    lbStatus.Text = "Patient Added Successfuly";
+                    lbStatus.Visible = true;
+                    lbStatus.Attributes.Add("style", "border-color: lightseagreen;");
+                }
+                catch
+                {
+                    lbStatus.Visible = true;
+                    lbStatus.Attributes.Add("style", "border-color: red;");
+
+                    // input validation for existing patient ID
+                    if (count > 0)
                     {
-                        conn.Open();
-                        cmdInsertMorguePatient.ExecuteNonQuery();
-
-                        lbStatus.Text = "Patient Added Successfuly";
-                        lbStatus.Visible = true;
-                        lbStatus.Attributes.Add("style", "border-color: lightseagreen;");
+                        lbStatus.Text = "Patient ID already exists";
                     }
-                    catch
-
+                    else
                     {
-                        lbStatus.Visible = true;
-                        lbStatus.Attributes.Add("style", "border-color: red;");
-
-                        // input validation for existing patient ID
-                        if (count > 0)
-                        {
-                            lbStatus.Text = "Patient ID already exists";
-                        }
-                        else
-                        {
-                            lbStatus.Text = "Patient Upload Failed";
-                        }
-                    }
-                    finally
-                    {
-                        conn.Close();
-
+                        lbStatus.Text = "Patient Upload Failed";
                     }
                 }
+                finally
+                {
+                    conn.Close();
+                }
+
             }
         }
     }
