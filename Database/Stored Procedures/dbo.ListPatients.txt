@@ -1,0 +1,23 @@
+USE [MorgueTracker]
+GO
+/****** Object:  StoredProcedure [dbo].[ListPatients]    Script Date: 8/2/2023 11:01:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[ListPatients] 
+	-- Add the parameters for the stored procedure here
+
+	AS
+
+BEGIN
+
+    SELECT Patient_ID, Patient_Name, Created_Date
+    FROM MorgueTracker
+    WHERE Funeral_Home IS NULL OR Funeral_Home = ''
+END

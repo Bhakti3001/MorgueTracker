@@ -1,0 +1,35 @@
+USE [MorgueTracker]
+GO
+/****** Object:  StoredProcedure [dbo].[UpdatePatientInfo]    Script Date: 8/2/2023 11:01:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Campbell Frost
+-- Create date: 6/20/23
+-- Description:	Inserts values into MorguePatient table
+-- =============================================
+
+CREATE PROCEDURE [dbo].[UpdatePatientInfo]
+	-- Add the parameters for the stored procedure here
+	@Patient_ID INT,
+	@Patient_Name NVARCHAR(100),
+	@In_Employee_ID INT,
+	@In_Employee_Name NVARCHAR(100),
+	@Location_In_Morgue NVARCHAR(100)
+	AS
+BEGIN
+-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	UPDATE MorgueTracker
+  SET
+    Patient_Name = @Patient_Name,
+    In_Employee_ID = @In_Employee_ID,
+    In_Employee_Name = @In_Employee_Name,
+    Location_In_Morgue = @Location_In_Morgue
+  WHERE Patient_ID = @Patient_ID;
+
+END

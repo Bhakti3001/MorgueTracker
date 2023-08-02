@@ -1,0 +1,35 @@
+USE [MorgueTracker]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertPickedUpInfo]    Script Date: 8/2/2023 10:58:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Campbell Frost
+-- Create date: 7/20/23
+-- Description:	Inserts picked up info into database
+-- =============================================
+CREATE PROCEDURE [dbo].[InsertPickedUpInfo]
+    @Patient_ID INT,
+    @Funeral_Home NVARCHAR(200),
+	@Funeral_Home_Employee NVARCHAR(100),
+	@Out_Employee_Name NVARCHAR(100),
+	@Out_Employee_ID INT,
+    @Picked_Up_Date DATETIME
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	UPDATE MorgueTracker
+	SET Picked_Up_Date = @Picked_Up_Date,
+		Funeral_Home = @Funeral_Home,
+		Funeral_Home_Employee = @Funeral_Home_Employee,
+		Out_Employee_Name = @Out_Employee_Name,
+		Out_Employee_ID = @Out_Employee_ID
+		WHERE Patient_ID = @Patient_ID
+    
+	
+END

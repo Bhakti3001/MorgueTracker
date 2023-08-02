@@ -1,0 +1,23 @@
+USE [MorgueTracker]
+GO
+/****** Object:  StoredProcedure [dbo].[SearchPatientByID]    Script Date: 8/2/2023 11:01:32 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Campbell Frost
+-- Create date: 6/20/23
+-- Description:	Returns name associated with Patient_ID
+-- =============================================
+
+CREATE PROCEDURE [dbo].[SearchPatientByID]
+    @Patient_ID int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT Patient_Name, In_Employee_Name, In_Employee_ID,  Funeral_Home, Funeral_Home_Employee, Out_Employee_Name, Out_Employee_ID, Created_Date, Picked_Up_Date, Location_In_Morgue
+	FROM MorgueTracker
+    WHERE Patient_ID = @Patient_ID
+END

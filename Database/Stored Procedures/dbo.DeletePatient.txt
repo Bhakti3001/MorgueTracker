@@ -1,0 +1,23 @@
+USE [MorgueTracker]
+GO
+/****** Object:  StoredProcedure [dbo].[DeletePatient]    Script Date: 8/2/2023 10:56:56 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[DeletePatient]
+-- Add the parameters for the stored procedure here
+ @Patient_ID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Delete the patient record and associated data
+    DELETE FROM [MorgueTracker].[dbo].[MorgueTracker]
+    WHERE [Patient_ID] = @Patient_ID;
+END;
